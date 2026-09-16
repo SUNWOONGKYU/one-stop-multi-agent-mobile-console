@@ -3,7 +3,7 @@
 > 어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종(Antigravity · Codex CLI · Claude Code CLI)을 연결하는 무설치 포터블 스타터 킷.
 > 폰은 북마크 하나, PC는 켜 두기만. 지시는 폰에서, 실행과 파일은 전부 PC 안에서.
 
-**소개 페이지:** https://sunwoongkyu.github.io/one-stop-multi-agent-mobile-console/
+**소개 페이지:** https://one-stop-multi-agent-mobile-console.vercel.app/
 
 ## 한눈에
 

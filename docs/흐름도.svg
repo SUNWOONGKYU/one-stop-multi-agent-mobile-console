@@ -94,14 +94,14 @@
 
   <rect class="stepGold" x="516" y="582" width="350" height="108" rx="8"/>
   <text class="numLight" x="536" y="614">6</text>
-  <text class="head" x="566" y="614">허브가 장부 조회</text>
-  <text class="body" x="536" y="644">켜진 PC 1대 → 0.5초 뒤 자동 이동</text>
-  <text class="body" x="536" y="672">여러 대 → PC 카드 골라 터치</text>
+  <text class="head" x="566" y="614">통합 허브 — PC 탭 선택</text>
+  <text class="body" x="536" y="644">[PC 1번][PC 2번] 탭 · 상태등 🟢</text>
+  <text class="body" x="536" y="672">터치 한 번으로 PC 간 즉시 전환</text>
 
   <rect class="stepGreen" x="946" y="582" width="350" height="108" rx="8"/>
   <text class="num" x="966" y="614">7</text>
   <text class="head" x="996" y="614">콘솔 화면 도착</text>
-  <text class="body" x="966" y="644">터널 → server.js → 4탭 화면</text>
+  <text class="body" x="966" y="644">터널 → server.js → 4탭 화면(허브 안)</text>
   <text class="body" x="966" y="672">PIN 1회 → 세션 토큰, 이후 자동</text>
 
   <path class="flowGold" d="M 436 622 L 514 622"/>
@@ -113,7 +113,7 @@
   <rect class="stepGreen" x="86" y="850" width="350" height="136" rx="8"/>
   <text class="num" x="106" y="882">8</text>
   <text class="head" x="136" y="882">탭 고르고 지시</text>
-  <text class="body" x="106" y="912">Antigravity · Codex · Claude Code 탭</text>
+  <text class="body" x="106" y="912">PC 탭 고르고 → 워커 탭 고르고</text>
   <text class="body" x="106" y="940">텍스트, 사진·파일 업로드, 요약 칩</text>
   <text class="note" x="106" y="968">긴급 정지 버튼은 언제나</text>
 

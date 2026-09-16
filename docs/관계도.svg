@@ -40,18 +40,18 @@
   <text class="colHead" x="86" y="176">스마트폰 (어디서든)</text>
 
   <rect class="cardGreen" x="90" y="220" width="410" height="120" rx="8"/>
-  <text class="cardHead" x="114" y="254">폰 브라우저 — 고정 주소 하나</text>
-  <text class="body" x="114" y="288">북마크 한 개로 접속, 앱 설치 없음</text>
-  <text class="body" x="114" y="316">켜진 PC가 1대면 0.5초 만에 자동 직통</text>
+  <text class="cardHead" x="114" y="254">폰 브라우저 — 통합 관제 화면</text>
+  <text class="body" x="114" y="288">북마크 하나, 앱 설치 없음</text>
+  <text class="body" x="114" y="316">상단 [PC 1번][PC 2번] 탭으로 즉시 전환</text>
 
   <rect class="card" x="90" y="366" width="410" height="240" rx="8"/>
   <text class="cardHead" x="114" y="400">모바일 콘솔 화면 — 탭 4개</text>
   <text class="body" x="114" y="434">🪐 Antigravity — PC 대화창 실시간 미러</text>
   <text class="body" x="114" y="462">⚡ Codex — 지시하고 결과 받기</text>
   <text class="body" x="114" y="490">🤖 Claude Code — 지시하고 결과 받기</text>
-  <text class="body" x="114" y="518">📁 파일·시스템 — 목록·편집·저장</text>
+  <text class="body" x="114" y="518">📑 프로젝트 탭 — 예: M&amp;A 제안서 매칭</text>
   <text class="note" x="114" y="556">공통: 사진·파일 업로드, 긴급 정지,</text>
-  <text class="note" x="114" y="584">[⇄ PC 전환]으로 다른 PC로 이동</text>
+  <text class="note" x="114" y="584">단순화/전체 상세 모드 토글</text>
 
   <rect class="card" x="90" y="632" width="410" height="120" rx="8"/>
   <text class="cardHead" x="114" y="666">보안</text>
@@ -105,9 +105,9 @@
   <text class="body" x="1344" y="316">포트 개방·공유기 설정 없음, SSL 자동</text>
 
   <rect class="cardGold" x="1320" y="384" width="410" height="124" rx="8"/>
-  <text class="cardHead" x="1344" y="418">고정 허브 (Vercel 정적 1장)</text>
-  <text class="body" x="1344" y="452">장부를 읽어 켜진 PC로 보내 준다</text>
-  <text class="body" x="1344" y="480">여러 대면 PC 카드 목록을 보여 준다</text>
+  <text class="cardHead" x="1344" y="418">통합 허브 (Vercel 정적 1장)</text>
+  <text class="body" x="1344" y="452">PC별 탭 · 상태등 · 즉시 전환</text>
+  <text class="body" x="1344" y="480">PC별 전용 주소도 따로 발급</text>
 
   <rect class="card" x="1320" y="534" width="410" height="124" rx="8"/>
   <text class="cardHead" x="1344" y="568">기기 장부 (GitHub Gist)</text>
@@ -137,7 +137,7 @@
   <text class="edgeLabel" x="1540" y="526">장부 조회</text>
   <!-- 허브 → 터널 (리다이렉트) -->
   <path class="flowGold" d="M 1400 384 L 1400 346"/>
-  <text class="edgeLabel" x="1412" y="372">② 켜진 PC 주소로</text>
+  <text class="edgeLabel" x="1412" y="372">② 고른 PC 주소로</text>
   <!-- 터널 → server -->
   <path class="flowGold" d="M 1318 282 L 1180 282 L 1180 568 L 1072 568"/>
   <text class="edgeLabel" x="1188" y="520">③ 7890 전달</text>
@@ -163,5 +163,5 @@
   <path class="flowGray" d="M 630 940 L 560 940 L 560 690 L 500 690"/>
   <text class="edgeLabel" x="508" y="820">지시·업로드</text>
 
-  <text class="note" x="60" y="1140">2026-09-16 기준 · 스타터 킷 1폴더 · 실행 파일 2개 내장(cloudflared, ttyd) · 워커 3종 · 포트 7890 · 폴링 1.2~1.5초</text>
+  <text class="note" x="60" y="1140">2026-09-16 기준 · 스타터 킷 1폴더 · 실행 파일 2개 내장(cloudflared, ttyd) · 워커 3종 · PC 여러 대 탭 전환 · 포트 7890 · 폴링 1.2~1.5초</text>
 </svg>

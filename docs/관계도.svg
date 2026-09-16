@@ -76,7 +76,7 @@
   <rect class="cardGreen" x="630" y="492" width="440" height="152" rx="8"/>
   <text class="cardHead" x="654" y="526">server.js (7890) — 모바일 콘솔 서버</text>
   <text class="body" x="654" y="560">화면(4탭)과 API를 한 파일에서 제공</text>
-  <text class="body" x="654" y="588">PIN·토큰 검사, 폰은 1~2초마다 폴링</text>
+  <text class="body" x="654" y="588">PIN·토큰 검사, 폰은 1.2~1.5초 폴링</text>
   <text class="note" x="654" y="622">WebSocket 없음 — 단순해서 잘 안 죽는다</text>
 
   <rect class="card" x="630" y="670" width="440" height="180" rx="8"/>
@@ -112,7 +112,7 @@
   <rect class="card" x="1320" y="534" width="410" height="124" rx="8"/>
   <text class="cardHead" x="1344" y="568">기기 장부 (GitHub Gist)</text>
   <text class="body" x="1344" y="602">어느 PC가 켜져 있고 주소가 뭔지</text>
-  <text class="body" x="1344" y="630">12시간 소식 없는 PC는 자동 제거</text>
+  <text class="body" x="1344" y="630">24시간 소식 없는 PC는 자동 제거</text>
 
   <rect class="cardDark" x="1320" y="684" width="410" height="212" rx="8"/>
   <text class="cardHead" x="1344" y="718" fill="#fafaf7" style="fill:#fafaf7">AI 워커 3종 (전부 PC 안에서 실행)</text>

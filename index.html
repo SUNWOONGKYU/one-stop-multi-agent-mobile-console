@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One-Stop Multi-Agent Mobile Console — 폰 하나로 내 PC의 AI 워커 3종을 지휘한다</title>
+<title>One-Stop Multi-Agent Mobile Console — 스마트폰에서 내 PC의 AI 워커 3종을 지휘한다</title>
 <meta name="description" content="어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종(Antigravity·Codex·Claude Code)을 연결하는 무설치 포터블 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만, 여러 대면 탭으로 전환. 클라우드에는 대화도 파일도 남지 않는다.">
 <meta property="og:title" content="One-Stop Multi-Agent Mobile Console">
-<meta property="og:description" content="폰 하나로, 내 PC의 AI 워커 3종을 지휘한다. 무설치 포터블 스타터 킷.">
+<meta property="og:description" content="스마트폰에서 내 PC의 AI 워커 3종을 지휘한다. PC 여러 대는 탭으로 전환. 무설치 포터블 스타터 킷.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://one-stop-multi-agent-mobile-console.vercel.app/">
 <meta property="og:image" content="https://one-stop-multi-agent-mobile-console.vercel.app/docs/관계도.png">
@@ -126,7 +126,7 @@
 <section class="hero" style="border-top:0"><div class="wrap hgrid">
   <div>
     <div class="eyebrow">무설치 포터블 · 내 PC에서 구동 · 클라우드에 데이터 없음</div>
-    <h1>폰 하나로,<br><em>내 PC의 AI 워커 3종</em>을<br>지휘한다</h1>
+    <h1>스마트폰에서,<br><em>내 PC의 AI 워커 3종</em>을<br>지휘한다</h1>
     <p class="lede">어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종을 연결하는 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만. PC가 여러 대면 폰 화면 상단 탭으로 번갈아 지휘한다. 지시는 폰에서, 실행과 파일은 전부 PC 안에서.</p>
     <div class="cta">
       <a class="btn btn-primary" href="#how">작동 방식 보기</a>
@@ -196,12 +196,12 @@
     <tbody>
       <tr><td>1클릭 실행기 <code>.bat</code></td><td>더블 클릭 한 번으로 전체 기동. Node.js만 있으면 어느 PC든.</td><td>작업 PC</td></tr>
       <tr><td><code>tunnel.js</code></td><td>내장 cloudflared로 공개 https 주소 발급, 기기 장부에 PC 이름·프로젝트·주소 등록, 60초 하트비트.</td><td>작업 PC</td></tr>
-      <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(4탭)과 API를 한 파일로. PIN·토큰 검사, 폰은 1~2초 폴링. WebSocket 없음.</td><td>작업 PC</td></tr>
+      <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(4탭)과 API를 한 파일로. PIN·토큰 검사, 폰은 1.2~1.5초 폴링. WebSocket 없음.</td><td>작업 PC</td></tr>
       <tr><td>워커 브릿지 3개</td><td><code>live_sync_engine</code>은 Antigravity 대화 로그를 읽기만 해서 비추고, <code>codex_bridge</code>·<code>claude_bridge</code>는 CLI를 실행해 결과를 저장.</td><td>작업 PC</td></tr>
       <tr><td>파일 큐 (JSON)</td><td>폰의 지시, 워커 응답, 업로드 파일이 오가는 우체통. <code>watch_mobile_tasks</code>가 지시를 감지해 Antigravity를 깨운다.</td><td>작업 PC</td></tr>
       <tr><td>Cloudflare 터널</td><td>PC 안 7890 포트 ↔ 공개 https. 포트 개방·공유기 설정 없음, SSL 자동.</td><td>클라우드</td></tr>
       <tr><td>통합 허브</td><td>정적 페이지 1장. 장부를 읽어 켜진 PC마다 탭을 띄우고(상태등 🟢), 탭 터치로 PC 간 즉시 전환. PC별 전용 주소도 발급. 폰 북마크는 이 주소 하나.</td><td>클라우드</td></tr>
-      <tr><td>기기 장부</td><td>어느 PC가 켜져 있고 주소가 무엇인지. 12시간 소식 없는 PC는 자동 제거.</td><td>클라우드</td></tr>
+      <tr><td>기기 장부</td><td>어느 PC가 켜져 있고 주소가 무엇인지. 24시간 소식 없는 PC는 자동 제거.</td><td>클라우드</td></tr>
     </tbody>
   </table></div>
 </div></section>

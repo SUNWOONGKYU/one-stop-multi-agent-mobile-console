@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Stop Multi-Agent Mobile Console — 폰 하나로 내 PC의 AI 워커 3종을 지휘한다</title>
+<meta name="description" content="어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종(Antigravity·Codex·Claude Code)을 연결하는 무설치 포터블 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만. 클라우드에는 대화도 파일도 남지 않는다.">
+<meta property="og:title" content="One-Stop Multi-Agent Mobile Console">
+<meta property="og:description" content="폰 하나로, 내 PC의 AI 워커 3종을 지휘한다. 무설치 포터블 스타터 킷.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sunwoongkyu.github.io/one-stop-multi-agent-mobile-console/">
+<meta property="og:image" content="https://sunwoongkyu.github.io/one-stop-multi-agent-mobile-console/docs/관계도.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ctext%20y%3D'.9em'%20font-size%3D'90'%3E%F0%9F%93%B1%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#070b14; --bg2:#0b1220; --panel:#111a2b; --panel2:#0e1626;
+    --line:rgba(148,163,184,.14); --line2:rgba(148,163,184,.24);
+    --ink:#eef2f8; --dim:#9aa8bd; --faint:#6b7a91;
+    --brand:#34d399; --brand2:#059669; --accent:#a78bfa; --amber:#fbbf24;
+    --r:16px; --maxw:1120px;
+  }
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,11,20,.78);border-bottom:1px solid var(--line)}
+  .hrow{display:flex;align-items:center;gap:16px;height:62px}
+  .logo{font-weight:800;letter-spacing:-.02em;font-size:15px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .logo span{color:var(--brand)}
+  @media(max-width:560px){.logo{font-size:13.5px}.logo span{display:none}}
+  .hspace{flex:1}
+  .hlinks{display:flex;gap:10px;align-items:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 20px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;transition:.18s ease;white-space:nowrap}
+  .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#031614;box-shadow:0 6px 24px rgba(52,211,153,.28)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(52,211,153,.4)}
+  .btn-ghost{background:rgba(148,163,184,.08);border-color:var(--line2);color:var(--ink)}
+  .btn-ghost:hover{background:rgba(148,163,184,.16)}
+  .btn-sm{padding:9px 15px;font-size:14px;border-radius:10px}
+  .hero{position:relative;padding:64px 0 72px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:-40% 20% auto -20%;height:620px;background:radial-gradient(closest-side,rgba(52,211,153,.18),transparent 70%);pointer-events:none}
+  .hero::after{content:"";position:absolute;inset:-10% -25% auto auto;width:640px;height:640px;background:radial-gradient(closest-side,rgba(167,139,250,.14),transparent 70%);pointer-events:none}
+  .hgrid{position:relative;display:grid;gap:44px;align-items:center}
+  @media(min-width:960px){.hgrid{grid-template-columns:1.08fr .92fr;gap:56px}.hero{padding:88px 0 96px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--brand);background:rgba(52,211,153,.10);border:1px solid rgba(52,211,153,.28);padding:6px 13px;border-radius:999px;margin-bottom:20px}
+  h1{font-size:clamp(30px,6.2vw,52px);line-height:1.18;letter-spacing:-.03em;margin:0 0 20px;font-weight:800}
+  h1 em{font-style:normal;background:linear-gradient(120deg,var(--brand),#6ee7b7);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:clamp(16px,2.2vw,18.5px);color:var(--dim);margin:0 0 30px;max-width:56ch}
+  .cta{display:flex;flex-wrap:wrap;gap:12px}
+  .cta-note{margin:14px 0 0;font-size:14px;color:var(--faint);line-height:1.7}
+  .cta-note b{color:var(--dim)}
+  .vendbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .vb{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--dim);background:rgba(148,163,184,.07);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  .vb i{width:8px;height:8px;border-radius:99px;flex:0 0 auto}
+  .vb small{font-size:11px;color:var(--faint);margin-left:1px}
+  /* phone mockup (CSS only) */
+  .phone{position:relative;margin:0 auto;width:min(300px,82vw);border-radius:40px;padding:11px;background:linear-gradient(160deg,#28344a,#131b2b);box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.07)}
+  .phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:82px;height:6px;border-radius:99px;background:#0a0f1a;z-index:2}
+  .screen{border-radius:30px;aspect-ratio:390/720;background:#0b0e17;overflow:hidden;display:flex;flex-direction:column;font-size:12px}
+  .s-top{padding:34px 16px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:var(--dim)}
+  .s-top b{color:var(--ink);font-size:13px}
+  .s-tabs{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+  .s-tabs span{flex:1;text-align:center;padding:7px 2px;border-radius:9px;background:rgba(148,163,184,.08);color:var(--dim);font-size:10px;white-space:nowrap}
+  .s-tabs span.on{background:rgba(52,211,153,.18);color:var(--brand);font-weight:700}
+  .s-chat{flex:1;padding:12px;display:flex;flex-direction:column;gap:8px}
+  .bub{max-width:82%;padding:8px 11px;border-radius:12px;line-height:1.45}
+  .bub.me{align-self:flex-end;background:rgba(52,211,153,.2);color:#d1fae5}
+  .bub.ai{align-self:flex-start;background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+  .bub small{display:block;color:var(--faint);font-size:10px;margin-top:3px}
+  .s-in{display:flex;gap:6px;padding:10px 12px 16px;border-top:1px solid var(--line)}
+  .s-in span{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--faint)}
+  .s-in b{background:var(--brand);color:#031614;border-radius:10px;padding:8px 12px}
+  .phone-glow{position:absolute;inset:auto 0 -30px 0;height:80px;filter:blur(38px);background:linear-gradient(90deg,rgba(52,211,153,.5),rgba(167,139,250,.45));z-index:-1;border-radius:99px}
+  section{padding:68px 0;border-top:1px solid var(--line)}
+  @media(min-width:900px){section{padding:92px 0}}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--brand);margin:0 0 12px}
+  h2{font-size:clamp(24px,4.2vw,36px);line-height:1.25;letter-spacing:-.025em;margin:0 0 14px;font-weight:800}
+  .sub{color:var(--dim);font-size:17px;margin:0 0 38px;max-width:64ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}
+  @media(min-width:760px){.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:24px 22px}
+  .card .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);margin-bottom:14px}
+  .card h3{margin:0 0 8px;font-size:17px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--dim);font-size:14.5px}
+  .card .tag{display:inline-block;font-size:11px;font-weight:700;color:var(--amber);background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:middle}
+  .fig{background:#fafaf7;border:1px solid var(--line2);border-radius:var(--r);padding:8px;overflow:hidden}
+  .fig img{width:100%;height:auto;border-radius:10px}
+  .fig figcaption{color:var(--faint);font-size:13px;padding:10px 8px 4px}
+  .steps{counter-reset:s;display:grid;gap:14px}
+  @media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+  .step{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px 22px 66px}
+  .step::before{counter-increment:s;content:counter(s);position:absolute;left:20px;top:20px;width:32px;height:32px;border-radius:99px;display:grid;place-items:center;font-weight:800;color:#031614;background:var(--brand)}
+  .step h3{margin:0 0 6px;font-size:16px}
+  .step p{margin:0;color:var(--dim);font-size:14px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;color:var(--faint);font-weight:700;font-size:12px;letter-spacing:.06em;padding:10px 12px;border-bottom:1px solid var(--line2)}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--dim)}
+  td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;background:rgba(148,163,184,.1);padding:1px 6px;border-radius:6px;color:#c7d2fe}
+  .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--panel2)}
+  .final{text-align:center}
+  .final .cta{justify-content:center}
+  footer{border-top:1px solid var(--line);padding:34px 0 48px;color:var(--faint);font-size:13px}
+  footer a{color:var(--dim);text-decoration:none}
+  footer .frow{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+
+<header><div class="wrap hrow">
+  <div class="logo">📱 One-Stop Multi-Agent Mobile Console <span>· 스타터 킷</span></div>
+  <div class="hspace"></div>
+  <nav class="hlinks">
+    <a class="btn btn-ghost btn-sm" href="#how">작동 방식</a>
+    <a class="btn btn-ghost btn-sm" href="#arch">구성</a>
+    <a class="btn btn-primary btn-sm" href="https://github.com/SUNWOONGKYU/one-stop-multi-agent-mobile-console" target="_blank" rel="noopener">GitHub</a>
+  </nav>
+</div></header>
+
+<section class="hero" style="border-top:0"><div class="wrap hgrid">
+  <div>
+    <div class="eyebrow">무설치 포터블 · 내 PC에서 구동 · 클라우드에 데이터 없음</div>
+    <h1>폰 하나로,<br><em>내 PC의 AI 워커 3종</em>을<br>지휘한다</h1>
+    <p class="lede">어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종을 연결하는 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만. 지시는 폰에서 하고, 실행과 파일은 전부 PC 안에서 일어난다.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#how">작동 방식 보기</a>
+      <a class="btn btn-ghost" href="https://github.com/SUNWOONGKYU/one-stop-multi-agent-mobile-console" target="_blank" rel="noopener">GitHub 저장소</a>
+    </div>
+    <p class="cta-note"><b>필요한 것</b> — Node.js가 깔린 Windows PC 1대, 스마트폰 브라우저. 포트 개방·공유기 설정·앱 설치 전부 없음.</p>
+    <div class="vendbar">
+      <span class="vb"><i style="background:#60a5fa"></i>Antigravity <small>Google · 메인</small></span>
+      <span class="vb"><i style="background:#f59e0b"></i>Codex CLI <small>OpenAI · 서브</small></span>
+      <span class="vb"><i style="background:#d97706"></i>Claude Code <small>Anthropic · 서브</small></span>
+    </div>
+  </div>
+  <div>
+    <div class="phone">
+      <div class="screen">
+        <div class="s-top"><b>LAPTOP · 프로젝트 A</b><span>⇄ PC 전환</span></div>
+        <div class="s-tabs"><span class="on">🪐 Antigravity</span><span>⚡ Codex</span><span>🤖 Claude</span><span>📁 파일</span></div>
+        <div class="s-chat">
+          <div class="bub me">보고서 표 3개를 그래프로 바꿔서 다시 만들어 줘</div>
+          <div class="bub ai">표 3개를 막대·선·도넛으로 변환 중… 파일 2개 수정<small>Antigravity · 작업 중</small></div>
+          <div class="bub ai">완료. reports/summary.html 갱신, 그래프 3개 삽입.<small>Antigravity · 완료</small></div>
+          <div class="bub me">Codex, 이 스크립트 실행 시간 줄여 봐</div>
+        </div>
+        <div class="s-in"><span>지시를 입력…</span><b>전송</b></div>
+      </div>
+      <div class="phone-glow"></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="kicker">Problem</p>
+  <h2>AI 워커에게 일을 시키려면<br>결국 컴퓨터 앞에 앉아야 합니다</h2>
+  <p class="sub">Antigravity, Codex, Claude Code — 셋 다 PC에서 돕니다. 자리를 뜨는 순간 지시도, 확인도 끊깁니다. 원격 데스크톱은 무겁고, 터미널 공유는 폰에서 쓸 물건이 아닙니다.</p>
+  <div class="grid g3">
+    <div class="card"><div class="ic">🚶</div><h3>자리를 뜨면 끊긴다</h3><p>외출·이동·회의 중에는 돌아가는 작업을 볼 수도, 다음 지시를 줄 수도 없다.</p></div>
+    <div class="card"><div class="ic">🧩</div><h3>워커마다 창이 다르다</h3><p>IDE 대화창, 터미널 두 개. 폰에서 셋을 한 화면에 모을 방법이 없었다.</p></div>
+    <div class="card"><div class="ic">🔌</div><h3>설정이 무겁다</h3><p>포트 포워딩, 고정 IP, VPN, 앱 설치. PC를 바꾸면 처음부터 다시.</p></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <p class="kicker">How it works</p>
+  <h2>PC에서 한 번, 폰에서 한 번 —<br>그 뒤로는 지시하고 결과를 받는 일만</h2>
+  <p class="sub">스타터 킷 폴더를 더블 클릭하면 PC가 스스로 길을 열고 이름표를 붙입니다. 폰은 늘 같은 주소를 열기만 하면 됩니다.</p>
+  <div class="steps">
+    <div class="step"><h3>PC에서 더블 클릭</h3><p>실행기가 콘솔 서버를 띄우고, 내장 cloudflared로 공개 https 주소를 받아 기기 장부에 등록합니다. 60초마다 생존 신고.</p></div>
+    <div class="step"><h3>폰에서 북마크 열기</h3><p>고정 허브가 장부를 읽어 켜진 PC로 보내 줍니다. 1대면 0.5초 자동 직통, 여러 대면 PC 카드를 골라 터치.</p></div>
+    <div class="step"><h3>지시하고 결과 받기</h3><p>탭을 고르고 지시. Antigravity는 PC 대화창이 그대로 비치고, Codex·Claude는 CLI가 돌아 결과를 돌려줍니다. 긴급 정지는 언제나.</p></div>
+  </div>
+  <figure class="fig" style="margin:34px 0 0">
+    <img src="docs/흐름도.svg" alt="작업 흐름도 — 기동 4단계, 접속 3단계, 지시·실행·회신 5단계를 스마트폰·클라우드·작업 PC·AI 워커 네 레인으로 표시" width="1820" height="1320" loading="lazy">
+    <figcaption>작업 흐름도 — 12단계. 기동은 PC에서 1회, 접속은 폰에서 1회, 이후 8→12를 반복.</figcaption>
+  </figure>
+</div></section>
+
+<section id="arch"><div class="wrap">
+  <p class="kicker">Architecture</p>
+  <h2>클라우드는 길만 열어 주고,<br>실행과 파일은 전부 PC 안에</h2>
+  <p class="sub">허브와 장부가 아는 것은 "어느 PC가 켜져 있고 주소가 무엇인가"뿐입니다. 대화도, 업로드한 파일도, 워커가 만든 결과물도 클라우드에는 남지 않습니다.</p>
+  <figure class="fig">
+    <img src="docs/관계도.svg" alt="관계도 — 스마트폰, 작업 PC, 클라우드·AI 워커 세 열의 구성 요소와 연결" width="1820" height="1180" loading="lazy">
+    <figcaption>관계도 — 스마트폰 · 작업 PC · 클라우드/AI 워커. 실선은 실행 경로, 점선은 파일 큐.</figcaption>
+  </figure>
+  <div class="tbl" style="margin-top:28px"><table>
+    <thead><tr><th>구성 요소</th><th>역할</th><th>어디서</th></tr></thead>
+    <tbody>
+      <tr><td>1클릭 실행기 <code>.bat</code></td><td>더블 클릭 한 번으로 전체 기동. Node.js만 있으면 어느 PC든.</td><td>작업 PC</td></tr>
+      <tr><td><code>tunnel.js</code></td><td>내장 cloudflared로 공개 https 주소 발급, 기기 장부에 PC 이름·프로젝트·주소 등록, 60초 하트비트.</td><td>작업 PC</td></tr>
+      <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(4탭)과 API를 한 파일로. PIN·토큰 검사, 폰은 1~2초 폴링. WebSocket 없음.</td><td>작업 PC</td></tr>
+      <tr><td>워커 브릿지 3개</td><td><code>live_sync_engine</code>은 Antigravity 대화 로그를 읽기만 해서 비추고, <code>codex_bridge</code>·<code>claude_bridge</code>는 CLI를 실행해 결과를 저장.</td><td>작업 PC</td></tr>
+      <tr><td>파일 큐 (JSON)</td><td>폰의 지시, 워커 응답, 업로드 파일이 오가는 우체통. <code>watch_mobile_tasks</code>가 지시를 감지해 Antigravity를 깨운다.</td><td>작업 PC</td></tr>
+      <tr><td>Cloudflare 터널</td><td>PC 안 7890 포트 ↔ 공개 https. 포트 개방·공유기 설정 없음, SSL 자동.</td><td>클라우드</td></tr>
+      <tr><td>고정 허브</td><td>정적 페이지 1장. 장부를 읽어 켜진 PC로 보내거나 PC 카드 목록을 보여 준다. 폰 북마크는 이 주소 하나.</td><td>클라우드</td></tr>
+      <tr><td>기기 장부</td><td>어느 PC가 켜져 있고 주소가 무엇인지. 12시간 소식 없는 PC는 자동 제거.</td><td>클라우드</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="kicker">Workers</p>
+  <h2>메인 하나, 서브 둘 — 일에 맞는 워커를 골라 지시</h2>
+  <p class="sub">셋 다 PC 안에서 실행됩니다. 폰은 지시와 확인만 합니다.</p>
+  <div class="grid g3">
+    <div class="card"><div class="ic">🪐</div><h3>Antigravity <span class="tag">메인</span></h3><p>총괄 지휘·통합 코딩. PC의 IDE 대화창이 폰에 실시간으로 그대로 비친다. 폰의 지시는 파일 큐로 들어가 워커를 깨운다.</p></div>
+    <div class="card"><div class="ic">⚡</div><h3>Codex CLI <span class="tag">서브</span></h3><p>고속 스크립트·파일 수정. 무인 백그라운드 데몬으로 돌고, 결과는 messages 파일에 남아 폰이 폴링으로 가져간다.</p></div>
+    <div class="card"><div class="ic">🤖</div><h3>Claude Code CLI <span class="tag">서브</span></h3><p>심층 분석·복합 리팩터링. Codex와 같은 방식의 무인 데몬. 사진·파일을 올리면 자동 분석 프롬프트가 붙는다.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="kicker">Console</p>
+  <h2>탭 4개, 그리고 긴급 정지</h2>
+  <div class="grid g4">
+    <div class="card"><h3>🪐 Antigravity</h3><p>대화창 미러 + 지시 입력. 3줄 요약·한 줄 결론·계속 진행 칩.</p></div>
+    <div class="card"><h3>⚡ Codex</h3><p>지시 → 실행 → 결과. 상태 라벨(작업 중/대기)과 전체 히스토리.</p></div>
+    <div class="card"><h3>🤖 Claude Code</h3><p>Codex와 같은 레이아웃. 사진·파일 업로드 후 분석 지시.</p></div>
+    <div class="card"><h3>📁 파일·시스템</h3><p>호스트·가동시간·RAM, 파일 목록·검색·편집·저장. 작업 폴더 밖은 차단.</p></div>
+  </div>
+  <p class="cta-note" style="margin-top:18px">공통 — 사진·파일 업로드, <b>긴급 정지</b>(실행 중인 워커 프로세스 트리를 즉시 종료), 상단 <b>[⇄ PC 전환]</b>으로 다른 PC로 이동.</p>
+</div></section>
+
+<section><div class="wrap">
+  <p class="kicker">Design principles</p>
+  <h2>단순해서 잘 안 죽고, 클라우드에 남기지 않는다</h2>
+  <div class="grid g2">
+    <div class="card"><div class="ic">🔑</div><h3>PIN 한 번, 이후 토큰</h3><p>첫 접속에 PIN을 넣으면 세션 토큰이 발급되고 모든 API 호출에 자동으로 붙는다. 토큰 없는 요청은 전부 거절.</p></div>
+    <div class="card"><div class="ic">☁️</div><h3>클라우드에는 주소만</h3><p>허브와 장부는 "어느 PC가 켜져 있고 주소가 무엇인가"만 안다. 대화·파일·결과물은 PC 밖으로 나가지 않는다.</p></div>
+    <div class="card"><div class="ic">🔁</div><h3>WebSocket 없이 폴링</h3><p>1.2~1.5초 폴링과 JSON 파일 큐. 부품이 적어 끊겨도 스스로 돌아온다.</p></div>
+    <div class="card"><div class="ic">📦</div><h3>폴더 하나가 전부</h3><p>cloudflared·ttyd 실행 파일 내장. 폴더를 복사해 어느 PC, 어느 프로젝트에 붙여도 그대로 동작.</p></div>
+  </div>
+</div></section>
+
+<section class="final"><div class="wrap">
+  <p class="kicker">Starter kit</p>
+  <h2>폴더 하나, 더블 클릭 한 번</h2>
+  <p class="sub" style="margin-left:auto;margin-right:auto">실행기·서버·브릿지·터널 엔진과 실행 파일 2개가 한 폴더에 들어 있습니다. 소스와 사용법은 GitHub에서.</p>
+  <div class="cta">
+    <a class="btn btn-primary" href="https://github.com/SUNWOONGKYU/one-stop-multi-agent-mobile-console" target="_blank" rel="noopener">GitHub 저장소</a>
+    <a class="btn btn-ghost" href="https://saa.house/about" target="_blank" rel="noopener">만든 사람 — 선웅규</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap frow">
+  <div>One-Stop Multi-Agent Mobile Console · 원스톱 멀티 에이전트 모바일 콘솔 · 2026</div>
+  <div><a href="https://saa.house" target="_blank" rel="noopener">SUNNY AI AGENT HOUSE</a> · <a href="https://github.com/SUNWOONGKYU" target="_blank" rel="noopener">GitHub</a></div>
+</div></footer>
+
+</body>
+</html>

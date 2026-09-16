@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1820" height="1320" viewBox="0 0 1820 1320" role="img" aria-labelledby="t d">
+  <title id="t">One-Stop Multi-Agent Mobile Console 작업 흐름도 (2026-09-16)</title>
+  <desc id="d">PC 기동, 폰 접속, 지시와 실행, 응답 회신까지 12단계를 스마트폰·클라우드·작업 PC·AI 워커 네 줄(레인)로 나눠 보여준다.</desc>
+
+  <style>
+    .bg{fill:#fafaf7}
+    .lane{fill:#ffffff;stroke:#dce5de;stroke-width:2}
+    .laneHead{fill:#eaf2ed;stroke:#dce5de;stroke-width:2}
+    .band{fill:#f2f5f2}
+    .bandLabel{font:700 20px 'Malgun Gothic',Arial,sans-serif;fill:#2d6a4f}
+    .step{fill:#ffffff;stroke:#5f6b7a;stroke-width:2}
+    .stepGreen{fill:#eaf2ed;stroke:#2d6a4f;stroke-width:3}
+    .stepGold{fill:#fff8e7;stroke:#c9a961;stroke-width:3}
+    .stepDark{fill:#0a1f14}
+    .title{font:700 38px 'Malgun Gothic',Arial,sans-serif;fill:#0a1f14}
+    .sub{font:20px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
+    .colHead{font:700 25px 'Malgun Gothic',Arial,sans-serif;fill:#2d6a4f}
+    .num{font:700 22px 'Malgun Gothic',Arial,sans-serif;fill:#2d6a4f}
+    .numLight{font:700 22px 'Malgun Gothic',Arial,sans-serif;fill:#c9a961}
+    .head{font:700 21px 'Malgun Gothic',Arial,sans-serif;fill:#0a1f14}
+    .headLight{font:700 21px 'Malgun Gothic',Arial,sans-serif;fill:#fafaf7}
+    .body{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#3a3a30}
+    .bodyLight{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#fafaf7}
+    .note{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
+    .flow{stroke:#2d6a4f;stroke-width:3;fill:none;marker-end:url(#a)}
+    .flowGold{stroke:#c9a961;stroke-width:3;fill:none;marker-end:url(#ag)}
+    .flowGray{stroke:#5f6b7a;stroke-width:2;fill:none;stroke-dasharray:9 7;marker-end:url(#agr)}
+    .edgeLabel{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a;paint-order:stroke;stroke:#fafaf7;stroke-width:11;stroke-linejoin:round}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2d6a4f"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a961"/></marker>
+    <marker id="agr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6b7a"/></marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1820" height="1320"/>
+  <text class="title" x="60" y="70">One-Stop Multi-Agent Mobile Console — 작업 흐름도</text>
+  <text class="sub" x="60" y="104">PC에서 더블 클릭 한 번, 폰에서 북마크 한 번 — 그 뒤로는 지시하고 결과를 받는 일만 남는다</text>
+
+  <!-- 레인 4개 -->
+  <rect class="lane" x="60" y="140" width="400" height="1110" rx="10"/>
+  <rect class="laneHead" x="60" y="140" width="400" height="52" rx="10"/>
+  <text class="colHead" x="86" y="176">스마트폰</text>
+
+  <rect class="lane" x="490" y="140" width="400" height="1110" rx="10"/>
+  <rect class="laneHead" x="490" y="140" width="400" height="52" rx="10"/>
+  <text class="colHead" x="516" y="176">클라우드 (터널 · 허브 · 장부)</text>
+
+  <rect class="lane" x="920" y="140" width="400" height="1110" rx="10"/>
+  <rect class="laneHead" x="920" y="140" width="400" height="52" rx="10"/>
+  <text class="colHead" x="946" y="176">작업 PC (실행기 · 서버)</text>
+
+  <rect class="lane" x="1350" y="140" width="410" height="1110" rx="10"/>
+  <rect class="laneHead" x="1350" y="140" width="410" height="52" rx="10"/>
+  <text class="colHead" x="1376" y="176">AI 워커 (PC 안)</text>
+
+  <!-- 단계 밴드 라벨 -->
+  <text class="bandLabel" x="60" y="228">A. 기동 — PC에서 한 번</text>
+  <text class="bandLabel" x="60" y="560">B. 접속 — 폰에서 한 번</text>
+  <text class="bandLabel" x="60" y="828">C. 지시 · 실행 · 회신 — 반복</text>
+
+  <!-- ===== A. 기동 ===== -->
+  <rect class="stepGreen" x="946" y="250" width="350" height="108" rx="8"/>
+  <text class="num" x="966" y="282">1</text>
+  <text class="head" x="996" y="282">1클릭 실행기 더블 클릭</text>
+  <text class="body" x="966" y="312">watch_mobile_tasks 백그라운드 기동,</text>
+  <text class="body" x="966" y="340">tunnel.js 실행 (Node.js만 필요)</text>
+
+  <rect class="step" x="946" y="376" width="350" height="80" rx="8"/>
+  <text class="num" x="966" y="408">2</text>
+  <text class="head" x="996" y="408">server.js 기동 — 7890 포트</text>
+  <text class="body" x="966" y="438">콘솔 화면 + API 준비 완료</text>
+
+  <rect class="stepGold" x="516" y="376" width="350" height="80" rx="8"/>
+  <text class="numLight" x="536" y="408">3</text>
+  <text class="head" x="566" y="408">터널 개통 (cloudflared)</text>
+  <text class="body" x="536" y="438">공개 https 주소 발급, 포트 개방 없음</text>
+
+  <rect class="stepGold" x="516" y="474" width="350" height="80" rx="8"/>
+  <text class="numLight" x="536" y="506">4</text>
+  <text class="head" x="566" y="506">장부에 PC 등록</text>
+  <text class="body" x="536" y="536">이름·프로젝트·주소, 60초마다 갱신</text>
+
+  <path class="flow" d="M 1121 358 L 1121 374"/>
+  <path class="flowGold" d="M 946 416 L 868 416"/>
+  <path class="flowGold" d="M 691 456 L 691 472"/>
+  <text class="edgeLabel" x="700" y="470">주소 확보 후</text>
+
+  <!-- ===== B. 접속 ===== -->
+  <rect class="stepGreen" x="86" y="582" width="350" height="80" rx="8"/>
+  <text class="num" x="106" y="614">5</text>
+  <text class="head" x="136" y="614">고정 주소(북마크) 열기</text>
+  <text class="body" x="106" y="644">앱 설치 없음, 어느 폰이든</text>
+
+  <rect class="stepGold" x="516" y="582" width="350" height="108" rx="8"/>
+  <text class="numLight" x="536" y="614">6</text>
+  <text class="head" x="566" y="614">허브가 장부 조회</text>
+  <text class="body" x="536" y="644">켜진 PC 1대 → 0.5초 뒤 자동 이동</text>
+  <text class="body" x="536" y="672">여러 대 → PC 카드 골라 터치</text>
+
+  <rect class="stepGreen" x="946" y="582" width="350" height="108" rx="8"/>
+  <text class="num" x="966" y="614">7</text>
+  <text class="head" x="996" y="614">콘솔 화면 도착</text>
+  <text class="body" x="966" y="644">터널 → server.js → 4탭 화면</text>
+  <text class="body" x="966" y="672">PIN 1회 → 세션 토큰, 이후 자동</text>
+
+  <path class="flowGold" d="M 436 622 L 514 622"/>
+  <path class="flowGold" d="M 866 636 L 944 636"/>
+  <path class="flow" d="M 946 660 L 900 660 L 900 730 L 300 730 L 300 662"/>
+  <text class="edgeLabel" x="560" y="724">화면 전달 — 이제 폰이 PC의 리모컨</text>
+
+  <!-- ===== C. 지시·실행·회신 ===== -->
+  <rect class="stepGreen" x="86" y="850" width="350" height="136" rx="8"/>
+  <text class="num" x="106" y="882">8</text>
+  <text class="head" x="136" y="882">탭 고르고 지시</text>
+  <text class="body" x="106" y="912">Antigravity · Codex · Claude Code 탭</text>
+  <text class="body" x="106" y="940">텍스트, 사진·파일 업로드, 요약 칩</text>
+  <text class="note" x="106" y="968">긴급 정지 버튼은 언제나</text>
+
+  <rect class="step" x="946" y="850" width="350" height="164" rx="8"/>
+  <text class="num" x="966" y="882">9</text>
+  <text class="head" x="996" y="882">server.js가 길을 나눈다</text>
+  <text class="body" x="966" y="912">Antigravity → 지시를 파일 큐에 적고</text>
+  <text class="body" x="966" y="940">watch가 감지해 Antigravity를 깨움</text>
+  <text class="body" x="966" y="968">Codex·Claude → 브릿지가 CLI를</text>
+  <text class="body" x="966" y="996">바로 실행 (stdin으로 프롬프트)</text>
+
+  <rect class="stepDark" x="1376" y="850" width="360" height="164" rx="8"/>
+  <text class="numLight" x="1396" y="882">10</text>
+  <text class="headLight" x="1440" y="882">워커가 일한다 — PC 안에서</text>
+  <text class="bodyLight" x="1396" y="912">Antigravity: 총괄·통합 코딩</text>
+  <text class="bodyLight" x="1396" y="940">Codex: 고속 스크립트·파일 수정</text>
+  <text class="bodyLight" x="1396" y="968">Claude Code: 심층 분석·리팩터링</text>
+  <text class="bodyLight" x="1396" y="996">파일은 PC 작업 폴더에만 생긴다</text>
+
+  <rect class="step" x="946" y="1032" width="350" height="108" rx="8"/>
+  <text class="num" x="966" y="1064">11</text>
+  <text class="head" x="1006" y="1064">응답 저장 · 대화 미러</text>
+  <text class="body" x="966" y="1094">Codex·Claude 결과 → messages JSON</text>
+  <text class="body" x="966" y="1122">Antigravity 대화 로그 → 그대로 읽기</text>
+
+  <rect class="stepGreen" x="86" y="1032" width="350" height="108" rx="8"/>
+  <text class="num" x="106" y="1064">12</text>
+  <text class="head" x="146" y="1064">폰에 결과 표시</text>
+  <text class="body" x="106" y="1094">1.2~1.5초 폴링으로 자동 갱신</text>
+  <text class="body" x="106" y="1122">다음 지시 → 8번으로 반복</text>
+
+  <path class="flow" d="M 436 900 L 944 900"/>
+  <text class="edgeLabel" x="560" y="894">터널 통과 (토큰 자동 첨부)</text>
+  <path class="flow" d="M 1296 932 L 1374 932"/>
+  <path class="flowGray" d="M 1556 1014 L 1556 1086 L 1298 1086"/>
+  <text class="edgeLabel" x="1330" y="1110">결과·로그</text>
+  <path class="flow" d="M 946 1086 L 438 1086"/>
+  <text class="edgeLabel" x="560" y="1080">폴링 응답 — 최신 결과만</text>
+  <path class="flowGray" d="M 300 1032 L 300 1004 L 261 1004 L 261 986"/>
+  <text class="edgeLabel" x="312" y="1014">반복</text>
+
+  <text class="note" x="60" y="1290">2026-09-16 기준 · 기동 4단계는 PC에서 1회, 접속 3단계는 폰에서 1회, 이후 8→12를 반복 · 클라우드에는 대화·파일이 남지 않는다</text>
+</svg>

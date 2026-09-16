@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1820" height="1180" viewBox="0 0 1820 1180" role="img" aria-labelledby="t d">
+  <title id="t">One-Stop Multi-Agent Mobile Console 관계도 (2026-09-16)</title>
+  <desc id="d">스마트폰의 모바일 콘솔, 작업 PC의 실행기·터널·콘솔 서버·워커 브릿지, 클라우드의 터널·고정 허브·기기 장부, 그리고 AI 워커 3종의 관계. 무엇이 어디서 돌고 무엇이 무엇에 기대는지를 보여준다.</desc>
+
+  <style>
+    .bg{fill:#fafaf7}
+    .panel{fill:#ffffff;stroke:#dce5de;stroke-width:2}
+    .panelHead{fill:#eaf2ed;stroke:#dce5de;stroke-width:2}
+    .card{fill:#ffffff;stroke:#5f6b7a;stroke-width:2}
+    .cardGreen{fill:#eaf2ed;stroke:#2d6a4f;stroke-width:3}
+    .cardGold{fill:#fff8e7;stroke:#c9a961;stroke-width:3}
+    .cardDark{fill:#0a1f14}
+    .title{font:700 38px 'Malgun Gothic',Arial,sans-serif;fill:#0a1f14}
+    .sub{font:20px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
+    .colHead{font:700 25px 'Malgun Gothic',Arial,sans-serif;fill:#2d6a4f}
+    .cardHead{font:700 21px 'Malgun Gothic',Arial,sans-serif;fill:#0a1f14}
+    .body{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#3a3a30}
+    .bodyLight{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#fafaf7}
+    .note{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
+    .flow{stroke:#2d6a4f;stroke-width:3;fill:none;marker-end:url(#a)}
+    .flowGold{stroke:#c9a961;stroke-width:3;fill:none;marker-end:url(#ag)}
+    .flowGray{stroke:#5f6b7a;stroke-width:2;fill:none;stroke-dasharray:9 7;marker-end:url(#agr)}
+    .edgeLabel{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a;paint-order:stroke;stroke:#fafaf7;stroke-width:11;stroke-linejoin:round}
+  </style>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2d6a4f"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a961"/></marker>
+    <marker id="agr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6b7a"/></marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1820" height="1180"/>
+
+  <text class="title" x="60" y="70">One-Stop Multi-Agent Mobile Console — 관계도</text>
+  <text class="sub" x="60" y="104">사람은 스마트폰 하나만 들고, 실행은 켜 둔 작업 PC에서만 일어나며, 클라우드는 길만 열어 준다</text>
+
+  <!-- ============ 왼쪽: 스마트폰 ============ -->
+  <rect class="panel" x="60" y="140" width="470" height="640" rx="10"/>
+  <rect class="panelHead" x="60" y="140" width="470" height="52" rx="10"/>
+  <text class="colHead" x="86" y="176">스마트폰 (어디서든)</text>
+
+  <rect class="cardGreen" x="90" y="220" width="410" height="120" rx="8"/>
+  <text class="cardHead" x="114" y="254">폰 브라우저 — 고정 주소 하나</text>
+  <text class="body" x="114" y="288">북마크 한 개로 접속, 앱 설치 없음</text>
+  <text class="body" x="114" y="316">켜진 PC가 1대면 0.5초 만에 자동 직통</text>
+
+  <rect class="card" x="90" y="366" width="410" height="240" rx="8"/>
+  <text class="cardHead" x="114" y="400">모바일 콘솔 화면 — 탭 4개</text>
+  <text class="body" x="114" y="434">🪐 Antigravity — PC 대화창 실시간 미러</text>
+  <text class="body" x="114" y="462">⚡ Codex — 지시하고 결과 받기</text>
+  <text class="body" x="114" y="490">🤖 Claude Code — 지시하고 결과 받기</text>
+  <text class="body" x="114" y="518">📁 파일·시스템 — 목록·편집·저장</text>
+  <text class="note" x="114" y="556">공통: 사진·파일 업로드, 긴급 정지,</text>
+  <text class="note" x="114" y="584">[⇄ PC 전환]으로 다른 PC로 이동</text>
+
+  <rect class="card" x="90" y="632" width="410" height="120" rx="8"/>
+  <text class="cardHead" x="114" y="666">보안</text>
+  <text class="body" x="114" y="700">PIN 한 번 → 세션 토큰, 이후 자동</text>
+  <text class="body" x="114" y="728">모든 API가 토큰 없으면 거절</text>
+
+  <!-- ============ 가운데: 작업 PC ============ -->
+  <rect class="panel" x="600" y="140" width="500" height="960" rx="10"/>
+  <rect class="panelHead" x="600" y="140" width="500" height="52" rx="10"/>
+  <text class="colHead" x="626" y="176">작업 PC (켜 둔 내 컴퓨터)</text>
+
+  <rect class="cardGreen" x="630" y="220" width="440" height="96" rx="8"/>
+  <text class="cardHead" x="654" y="254">1클릭 실행기 (.bat) — 더블 클릭 한 번</text>
+  <text class="body" x="654" y="288">Node.js만 있으면 어느 PC든, 설치 없음</text>
+
+  <rect class="cardGold" x="630" y="342" width="440" height="136" rx="8"/>
+  <text class="cardHead" x="654" y="376">tunnel.js — 길 열고 이름표 붙이기</text>
+  <text class="body" x="654" y="410">내장 cloudflared로 공개 https 주소 발급</text>
+  <text class="body" x="654" y="438">PC 이름·프로젝트·주소를 장부에 등록,</text>
+  <text class="note" x="654" y="466">60초마다 생존 신고</text>
+
+  <rect class="cardGreen" x="630" y="492" width="440" height="152" rx="8"/>
+  <text class="cardHead" x="654" y="526">server.js (7890) — 모바일 콘솔 서버</text>
+  <text class="body" x="654" y="560">화면(4탭)과 API를 한 파일에서 제공</text>
+  <text class="body" x="654" y="588">PIN·토큰 검사, 폰은 1~2초마다 폴링</text>
+  <text class="note" x="654" y="622">WebSocket 없음 — 단순해서 잘 안 죽는다</text>
+
+  <rect class="card" x="630" y="670" width="440" height="180" rx="8"/>
+  <text class="cardHead" x="654" y="704">워커 브릿지 3개</text>
+  <text class="body" x="654" y="738">live_sync_engine — Antigravity 대화 로그를</text>
+  <text class="body" x="654" y="766">읽기만 해서 폰에 그대로 비춘다</text>
+  <text class="body" x="654" y="794">codex_bridge — Codex CLI 실행·결과 저장</text>
+  <text class="body" x="654" y="822">claude_bridge — Claude CLI 실행·결과 저장</text>
+
+  <rect class="card" x="630" y="876" width="440" height="196" rx="8"/>
+  <text class="cardHead" x="654" y="910">파일 큐 (JSON) — 폰과 워커의 우체통</text>
+  <text class="body" x="654" y="944">tasks_from_mobile — 폰의 지시</text>
+  <text class="body" x="654" y="972">codex/claude_messages — 워커 응답</text>
+  <text class="body" x="654" y="1000">uploads/ — 폰에서 올린 사진·파일</text>
+  <text class="note" x="654" y="1036">watch_mobile_tasks가 지시를 감지해</text>
+  <text class="note" x="654" y="1060">Antigravity를 깨운다</text>
+
+  <!-- ============ 오른쪽: 클라우드 · AI ============ -->
+  <rect class="panel" x="1290" y="140" width="470" height="960" rx="10"/>
+  <rect class="panelHead" x="1290" y="140" width="470" height="52" rx="10"/>
+  <text class="colHead" x="1316" y="176">클라우드 · AI 워커</text>
+
+  <rect class="cardGold" x="1320" y="220" width="410" height="124" rx="8"/>
+  <text class="cardHead" x="1344" y="254">Cloudflare 터널</text>
+  <text class="body" x="1344" y="288">PC 안 7890 포트 ↔ 공개 https 주소</text>
+  <text class="body" x="1344" y="316">포트 개방·공유기 설정 없음, SSL 자동</text>
+
+  <rect class="cardGold" x="1320" y="384" width="410" height="124" rx="8"/>
+  <text class="cardHead" x="1344" y="418">고정 허브 (Vercel 정적 1장)</text>
+  <text class="body" x="1344" y="452">장부를 읽어 켜진 PC로 보내 준다</text>
+  <text class="body" x="1344" y="480">여러 대면 PC 카드 목록을 보여 준다</text>
+
+  <rect class="card" x="1320" y="534" width="410" height="124" rx="8"/>
+  <text class="cardHead" x="1344" y="568">기기 장부 (GitHub Gist)</text>
+  <text class="body" x="1344" y="602">어느 PC가 켜져 있고 주소가 뭔지</text>
+  <text class="body" x="1344" y="630">12시간 소식 없는 PC는 자동 제거</text>
+
+  <rect class="cardDark" x="1320" y="684" width="410" height="212" rx="8"/>
+  <text class="cardHead" x="1344" y="718" fill="#fafaf7" style="fill:#fafaf7">AI 워커 3종 (전부 PC 안에서 실행)</text>
+  <text class="bodyLight" x="1344" y="754">🪐 Antigravity — 메인, Gemini</text>
+  <text class="bodyLight" x="1344" y="782">   총괄 지휘·통합 코딩, 대화창 미러</text>
+  <text class="bodyLight" x="1344" y="814">⚡ Codex CLI — GPT, 고속 스크립트·수정</text>
+  <text class="bodyLight" x="1344" y="846">🤖 Claude Code CLI — Opus, 심층 분석</text>
+  <text class="bodyLight" x="1344" y="878">   서브 둘은 무인 백그라운드 데몬</text>
+
+  <text class="note" x="1320" y="940">클라우드에는 대화도 파일도 남지 않는다.</text>
+  <text class="note" x="1320" y="968">허브와 장부가 아는 것은 "어느 PC가</text>
+  <text class="note" x="1320" y="996">켜져 있고 주소가 무엇인가" 뿐이다.</text>
+  <text class="note" x="1320" y="1036">터널 주소는 켤 때마다 바뀌지만</text>
+  <text class="note" x="1320" y="1064">폰의 북마크(허브)는 절대 안 바뀐다.</text>
+
+  <!-- ============ 화살표 ============ -->
+  <!-- 폰 → 허브 -->
+  <path class="flowGold" d="M 500 280 L 560 280 L 560 128 L 1240 128 L 1240 446 L 1318 446"/>
+  <text class="edgeLabel" x="800" y="135">① 고정 주소 접속 (북마크 하나)</text>
+  <!-- 허브 → 장부 -->
+  <path class="flowGray" d="M 1525 508 L 1525 532"/>
+  <text class="edgeLabel" x="1540" y="526">장부 조회</text>
+  <!-- 허브 → 터널 (리다이렉트) -->
+  <path class="flowGold" d="M 1400 384 L 1400 346"/>
+  <text class="edgeLabel" x="1412" y="372">② 켜진 PC 주소로</text>
+  <!-- 터널 → server -->
+  <path class="flowGold" d="M 1318 282 L 1180 282 L 1180 568 L 1072 568"/>
+  <text class="edgeLabel" x="1188" y="520">③ 7890 전달</text>
+  <!-- tunnel.js → 장부 -->
+  <path class="flow" d="M 1072 410 L 1160 410 L 1160 596 L 1318 596"/>
+  <text class="edgeLabel" x="1168" y="618">등록·60초 신고</text>
+  <!-- tunnel.js → cloudflared -->
+  <path class="flow" d="M 1072 372 L 1230 372 L 1230 300 L 1318 300"/>
+  <text class="edgeLabel" x="1236" y="366">터널 개통</text>
+  <!-- server ↔ 폰 (콘솔 화면) -->
+  <path class="flow" d="M 630 540 L 560 540 L 560 486 L 500 486"/>
+  <text class="edgeLabel" x="508" y="520">화면·응답</text>
+  <!-- server → 브릿지 -->
+  <path class="flow" d="M 850 644 L 850 668"/>
+  <text class="edgeLabel" x="862" y="662">지시 전달</text>
+  <!-- 브릿지 ↔ 큐 -->
+  <path class="flowGray" d="M 850 850 L 850 874"/>
+  <text class="edgeLabel" x="862" y="868">기록·읽기</text>
+  <!-- 브릿지 → AI 워커 -->
+  <path class="flow" d="M 1072 774 L 1318 774"/>
+  <text class="edgeLabel" x="1120" y="768">CLI 실행 / 로그 읽기</text>
+  <!-- 큐 → 폰 (업로드·지시) 점선 -->
+  <path class="flowGray" d="M 630 940 L 560 940 L 560 690 L 500 690"/>
+  <text class="edgeLabel" x="508" y="820">지시·업로드</text>
+
+  <text class="note" x="60" y="1140">2026-09-16 기준 · 스타터 킷 1폴더 · 실행 파일 2개 내장(cloudflared, ttyd) · 워커 3종 · 포트 7890 · 폴링 1.2~1.5초</text>
+</svg>

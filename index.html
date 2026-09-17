@@ -176,7 +176,7 @@
   <div class="steps">
     <div class="step"><h3>PC에서 Claude Code 창 + 실행기</h3><p>프로젝트 폴더에서 Claude Code 창 하나를 띄웁니다(없으면 서버가 자동으로 띄움). 실행기를 더블 클릭하면 콘솔 서버가 뜨고, 내장 cloudflared로 공개 https 주소를 받아 기기 장부에 등록합니다.</p></div>
     <div class="step"><h3>폰에서 북마크 열기</h3><p>통합 허브가 켜진 PC마다 탭을 띄웁니다. 허브는 각 PC의 상태를 4초마다 직접 확인해, 실제로 응답할 때만 탭에 초록불을 켭니다. PC별 전용 주소도 있습니다.</p></div>
-    <div class="step"><h3>지시하고 결과 받기</h3><p>탭을 고르고 지시. 메인(Claude Code)은 PC 창이 그대로 비치고 폰 지시가 그 창 콘솔에 그대로 타이핑됩니다. 서브(Codex·Antigravity·Grok)는 그때 데몬이 일어나 실행합니다. 긴급 정지는 언제나.</p></div>
+    <div class="step"><h3>지시하고 결과 받기</h3><p>탭을 고르고 지시. Claude Code 탭은 PC 창이 그대로 비치고 폰 지시가 그 창 콘솔에 그대로 타이핑됩니다. Codex·Antigravity·Grok 탭은 그때 데몬이 일어나 실행합니다. 긴급 정지는 언제나.</p></div>
   </div>
   <figure class="fig" style="margin:34px 0 0">
     <img src="docs/흐름도.svg" alt="작업 흐름도 — 기동 A, 접속 B, 지시 C 3개 밴드를 스마트폰·클라우드·작업 PC·AI 워커 네 레인으로 표시" width="1820" height="1320" loading="lazy">
@@ -216,7 +216,7 @@
 
 <section><div class="wrap">
   <p class="kicker">Workers</p>
-  <h2>메인 하나, 서브 셋 — 일에 맞는 워커를 골라 지시</h2>
+  <h2>PC 창 하나, 데몬 셋 — 일에 맞는 워커를 골라 지시</h2>
   <p class="sub">넷 다 PC 안에서 실행됩니다. 폰은 지시와 확인만 합니다.</p>
   <div class="grid g4">
     <div class="card"><h3>Claude Code <span class="tag">PC 창 대화형</span></h3><p>PC 터미널 창에서 대화형으로 돈다. 폰은 그 창의 대화를 그대로 미러링해 보고, 폰 지시는 콘솔 입력으로 그 창에 그대로 타이핑된다. 긴급 정지는 그 창에 Ctrl+C 주입.</p></div>
@@ -226,11 +226,11 @@
   </div>
   <div class="card" style="margin-top:20px">
     <h3 style="margin:0 0 8px;font-size:17px">데몬 워커는 부하도 보조도 아니다 — 앉은 자리</h3>
-    <p style="color:var(--dim);font-size:14.5px;margin:0 0 16px">메인/서브는 계급이 아니라 '앉은 자리'다. 네 워커 모두 같은 작업 폴더에서 읽고·쓰고·실행한다 — 능력은 대등하다. 독립 실행(폰 탭에서 직접 지시, 메인은 모름)일 때는 독립 작업자이고, 위임 수행(메인이 호출)일 때만 보조 성격을 띤다.</p>
+    <p style="color:var(--dim);font-size:14.5px;margin:0 0 16px">네 워커 사이에 계급은 없다 — 다른 것은 '앉은 자리'뿐. 모두 같은 작업 폴더에서 읽고·쓰고·실행한다 — 능력은 대등하다. 독립 실행(폰 탭에서 직접 지시, Claude Code는 모름)일 때는 독립 작업자이고, 위임 수행(Claude Code가 호출)일 때만 보조 성격을 띤다.</p>
     <div class="grid g3">
-      <div><b style="font-size:14px">① 폰 → 해당 탭 직접 지시</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px">메인을 거치지 않음 · 가장 빠름</p></div>
+      <div><b style="font-size:14px">① 폰 → 해당 탭 직접 지시</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px">Claude Code를 거치지 않음 · 가장 빠름</p></div>
       <div><b style="font-size:14px">② PC 터미널에서 직접</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>codex exec</code> · <code>agy -p</code> · <code>grok -p</code></p></div>
-      <div><b style="font-size:14px">③ 메인에게 시키기</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>node delegate.js grok "지시"</code></p></div>
+      <div><b style="font-size:14px">③ Claude Code에게 시키기</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>node delegate.js grok "지시"</code></p></div>
     </div>
     <p class="cta-note" style="margin-top:16px"><b>같은 파일을 두 워커가 동시에 만지지 않는다.</b> 데몬 워커도 파일을 쓴다 — 동시에 고치면 나중에 저장한 쪽이 이기고 되돌릴 수단이 없다.</p>
   </div>
@@ -240,13 +240,13 @@
   <p class="kicker">Console</p>
   <h2>탭 5개, 그리고 긴급 정지</h2>
   <div class="grid g4 console-grid">
-    <div class="card"><h3>Claude Code</h3><p>메인. PC 창 대화 미러 + 지시 입력. 폰 지시가 그 창 콘솔에 그대로 타이핑된다.</p></div>
+    <div class="card"><h3>Claude Code</h3><p>PC 창 대화형. 대화 미러 + 지시 입력. 폰 지시가 그 창 콘솔에 그대로 타이핑된다.</p></div>
     <div class="card"><h3>Codex</h3><p>지시 → 데몬 실행 → 결과. 상태 라벨(작업 중/대기)과 전체 히스토리.</p></div>
     <div class="card"><h3>Antigravity</h3><p>Codex와 같은 데몬 방식. 사진·파일 업로드 후 분석 지시.</p></div>
     <div class="card"><h3>Grok</h3><p>CLI 로그인 세션으로 실행하며, <code>grok_bridge</code>가 상태 확인과 지시 전송을 맡는다.</p></div>
     <div class="card"><h3>M&amp;A 제안서</h3><p>프로젝트 전용 화면(예: M&amp;A 제안서 배포·매칭). 파일 API는 작업 폴더 밖을 차단.</p></div>
   </div>
-  <p class="cta-note" style="margin-top:18px">공통 — 📎 업로드 하나(폰 기본 선택창, 중간 팝업 없음), 대화 보기 <b>요약/상세/전체</b>, <b>긴급 정지</b>(메인은 Ctrl+C 주입, 서브는 프로세스 종료), 허브 상단 <b>PC 탭</b>으로 다른 컴퓨터로 즉시 이동.</p>
+  <p class="cta-note" style="margin-top:18px">공통 — 📎 업로드 하나(폰 기본 선택창, 중간 팝업 없음), 대화 보기 <b>요약/상세/전체</b>, <b>긴급 정지</b>(Claude Code는 Ctrl+C 주입, 데몬은 프로세스 종료), 허브 상단 <b>PC 탭</b>으로 다른 컴퓨터로 즉시 이동.</p>
 </div></section>
 
 <section><div class="wrap">

@@ -85,7 +85,7 @@
 <div class="note">
 <b>이 구조의 핵심</b> — Claude 는 PC 창에 <b>한 명</b>뿐입니다.
 폰은 그 창을 <b>읽고(transcript)</b> <b>쓸(콘솔 주입)</b> 뿐, 별도 Claude 를 띄우지 않습니다.
-Antigravity 가 메인이던 시절과 같은 원칙입니다.
+Antigravity 가 PC 창을 맡던 시절과 같은 원칙입니다.
 </div>
 
 <h2>2. 이 시스템을 떠받치는 세 기술</h2>
@@ -126,7 +126,7 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 <div class="card scroll">
 <table>
 <tr><th style="width:130px">구분</th><th><span class="tag t-pipe">①</span> 원격 터널링</th><th><span class="tag t-main">②</span> 미러링</th><th><span class="tag t-s1">③</span> 프로세스 파이프 위임</th></tr>
-<tr><td>무엇을 잇나</td><td>폰 ↔ PC <b>네트워크</b></td><td>PC 창 ↔ 폰 <b>화면·입력</b></td><td>메인 ↔ <b>서브 워커</b></td></tr>
+<tr><td>무엇을 잇나</td><td>폰 ↔ PC <b>네트워크</b></td><td>PC 창 ↔ 폰 <b>화면·입력</b></td><td>Claude Code ↔ <b>데몬 워커</b></td></tr>
 <tr><td>쓰는 기술</td><td>Cloudflare Tunnel (cloudflared)</td><td>transcript 읽기 + AttachConsole·WriteConsoleInput</td><td>자식 프로세스 생성 + stdin/stdout 파이프</td></tr>
 <tr><td>없으면</td><td>같은 Wi-Fi 안에서만 쓸 수 있다</td><td>폰에서 PC 창을 보지도 쓰지도 못한다</td><td>워커 한 명만 쓰게 된다</td></tr>
 <tr><td>설정 부담</td><td><b>없음</b> — 포트 개방·고정 IP 불필요</td><td><b>없음</b> — PC 창만 띄워두면 됨</td><td><b>없음</b> — CLI 만 깔려 있으면 됨</td></tr>
@@ -142,24 +142,24 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 <h2>3. 데몬 워커란 무엇인가 — 부하도 보조도 아니다</h2>
 <div class="card">
 <div class="note">
-<b>메인 / 서브는 계급이 아니라 '앉은 자리'다.</b>
+<b>네 워커 사이에 계급은 없다 — 다른 것은 '앉은 자리'뿐.</b>
 네 워커 모두 같은 작업 폴더에서 파일을 읽고 쓰고 명령을 실행한다 — <b>능력은 대등하다.</b>
-차이는 창이 있고 대화가 이어지느냐(메인), 부를 때 일어나느냐(서브)뿐이다.
+차이는 창이 있고 대화가 이어지느냐(Claude Code), 부를 때 일어나느냐(데몬)뿐이다.
 </div>
 </div>
 
 <div class="card scroll">
 <pre>
- 서브 워커는 <b>두 가지 모드</b>로 일한다.
+ 데몬 워커는 <b>두 가지 모드</b>로 일한다.
 
  ┌─ 【독립 실행】 ─────────────────────────────────────────────┐
  │  폰의 Codex 탭 / Antigravity 탭 / Grok 탭 → 직접 지시 → 완결  │
- │  메인은 이 일이 있었는지도 모른다                             │
- │  → 이때 서브는 <b>독립 작업자</b>                                │
+ │  Claude Code는 이 일이 있었는지도 모른다                             │
+ │  → 이때 데몬 워커는 <b>독립 작업자</b>                                │
  └───────────────────────────────────────────────────────────┘
 
  ┌─ 【위임 수행】 ─────────────────────────────────────────────┐
- │  메인 → delegate.js 호출 → 결과를 메인이 받아 이어간다        │
+ │  Claude Code → delegate.js 호출 → 결과를 Claude Code가 받아 이어간다        │
  │  → 이때만 <b>보조</b> 성격을 띤다                                │
  └───────────────────────────────────────────────────────────┘
 
@@ -173,27 +173,27 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 <tr><th style="width:150px">부르는 말</th><th>적절한가</th><th>이유</th></tr>
 <tr><td>부하</td><td><b>✘</b></td><td>지시 관계가 고정돼 있지 않다. 사용자가 직접 부리는 일이 더 많다</td></tr>
 <tr><td>보조</td><td><b>✘</b></td><td>독립 실행할 때는 보조가 아니라 주역이다</td></tr>
-<tr><td><b>서브 워커</b></td><td><b>✔</b></td><td><b>메인 자리가 아니라는 뜻일 뿐</b> — 역할은 상황마다 다르다</td></tr>
+<tr><td><b>데몬 워커</b></td><td><b>✔</b></td><td><b>부를 때 일어난다는 뜻일 뿐</b> — 역할은 상황마다 다르다</td></tr>
 </table>
 </div>
 
 <div class="card scroll">
 <pre>
- 서브 워커에게 일을 시키는 <b>세 가지 길</b> — 셋 다 같은 워커에게 간다
+ 데몬 워커에게 일을 시키는 <b>세 가지 길</b> — 셋 다 같은 워커에게 간다
 
- ① 폰 → 해당 탭에서 직접 지시      <b>메인을 거치지 않음</b> · 가장 빠름
+ ① 폰 → 해당 탭에서 직접 지시      <b>Claude Code를 거치지 않음</b> · 가장 빠름
  ② PC 터미널에서 직접              codex exec "지시"  /  agy -p "지시"  /  grok -p "지시" -m grok-4.6 --always-approve
- ③ 메인에게 시키기                 node delegate.js codex "지시"
+ ③ Claude Code에게 시키기                 node delegate.js codex "지시"
 
- ①이 나은 때 — 단순 작업, 빠른 답, 메인이 바쁠 때 <b>동시 진행</b>
- ③이 나은 때 — 메인이 결과를 받아 <b>이어서 판단</b>해야 할 때, 여러 워커를 엮을 때
+ ①이 나은 때 — 단순 작업, 빠른 답, Claude Code가 바쁠 때 <b>동시 진행</b>
+ ③이 나은 때 — Claude Code가 결과를 받아 <b>이어서 판단</b>해야 할 때, 여러 워커를 엮을 때
 </pre>
 <div class="note danger">
 <b>⚠️ 같은 파일을 동시에 만지면 안 된다.</b>
-서브 워커도 파일을 <b>쓴다</b>(실측 확인). 메인과 서브가 같은 파일을 동시에 고치면
+데몬 워커도 파일을 <b>쓴다</b>(실측 확인). 두 워커가 같은 파일을 동시에 고치면
 <b>나중에 저장한 쪽이 이기고</b> 되돌릴 수단이 없다.
 2026-09-17 에 <code>server.js</code> 에서 실제로 작업이 두 번 사라졌다.<br>
-→ 서로 다른 파일이면 <b>동시에 시켜도 좋다</b>(오히려 빠르다). 같은 파일이면 <b>메인을 거쳐 순서를 잡을 것</b>.
+→ 서로 다른 파일이면 <b>동시에 시켜도 좋다</b>(오히려 빠르다). 같은 파일이면 <b>Claude Code를 거쳐 순서를 잡을 것</b>.
 </div>
 </div>
 
@@ -289,10 +289,10 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 </pre>
 </div>
 
-<h2>8. 메인 → 서브 위임 흐름</h2>
+<h2>8. Claude Code → 데몬 위임 흐름</h2>
 <div class="card scroll">
 <pre>
- 메인 워커 (PC 창의 Claude Code)
+ Claude Code (PC 창)
       │
       │  node delegate.js codex "지시"
       │  node delegate.js agy   "지시"
@@ -304,7 +304,7 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
       └──▶ grok_bridge         → grok -p     → 결과 반환
       │
       ▼
- 결과가 해당 탭 대화에 쌓이고, 메인 워커도 그 답을 받아본다
+ 결과가 해당 탭 대화에 쌓이고, Claude Code도 그 답을 받아본다
 </pre>
 </div>
 
@@ -330,7 +330,7 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 브라우저 터미널·별도 세션·node-pty 는 <b>쓰지 않습니다</b> (2026-09-17 폐기).
 </div>
 <div class="note">
-<b>시행착오 기록</b> — 메인 워커를 ① 헤드리스 별도 세션 ② 브라우저 공유 터미널(PTY) 로 만들었다가 둘 다 폐기했습니다.
+<b>시행착오 기록</b> — PC 창 연결을 ① 헤드리스 별도 세션 ② 브라우저 공유 터미널(PTY) 로 만들었다가 둘 다 폐기했습니다.
 둘 다 “폰 = PC 창 그대로” 라는 원칙을 깼기 때문입니다. 정답은 <b>PC 창의 콘솔 입력 버퍼에 직접 타이핑</b>하는 것이었습니다.
 </div>
 </div>

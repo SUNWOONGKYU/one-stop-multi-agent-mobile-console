@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1820" height="1320" viewBox="0 0 1820 1320" role="img" aria-labelledby="t d">
   <title id="t">One-Stop Multi-Agent Mobile Console 작업 흐름도 (2026-09-17)</title>
-  <desc id="d">PC 기동, 폰 접속, 지시·실행·회신까지 13단계를 스마트폰·클라우드·작업 PC·AI 워커 네 레인으로 나눠 보여준다. 기동은 PC에서 한 번, 접속은 폰에서 한 번, 지시·실행·회신은 반복한다. 메인 탭은 콘솔 주입, 서브 탭은 데몬 실행, 메인이 위임하면 delegate.js가 파이프로 서브를 부른다.</desc>
+  <desc id="d">PC 기동, 폰 접속, 지시·실행·회신까지 13단계를 스마트폰·클라우드·작업 PC·AI 워커 네 레인으로 나눠 보여준다. 기동은 PC에서 한 번, 접속은 폰에서 한 번, 지시·실행·회신은 반복한다. Claude Code 탭은 콘솔 주입, 데몬 탭은 데몬 실행, Claude Code가 위임하면 delegate.js가 파이프로 데몬을 부른다.</desc>
 
   <style>
     .bg{fill:#fafaf7}
@@ -128,26 +128,26 @@
   <rect class="step" x="900" y="912" width="420" height="150" rx="8"/>
   <text class="num" x="920" y="944">10</text>
   <text class="head" x="960" y="944">탭별 실행</text>
-  <text class="body" x="920" y="972">메인 탭 — cwd로 창 찾기 → 콘솔 주입</text>
+  <text class="body" x="920" y="972">Claude Code 탭 — cwd로 창 찾기 → 콘솔 주입</text>
   <text class="note" x="920" y="994">(console_inject.ps1, 포커스는 안 뺏는다)</text>
-  <text class="body" x="920" y="1020">서브 탭 — 해당 브릿지가 데몬을 실행</text>
-  <text class="note" x="920" y="1042">(codex_bridge · antigravity_bridge)</text>
+  <text class="body" x="920" y="1020">데몬 탭 — 해당 브릿지가 데몬을 실행</text>
+  <text class="note" x="920" y="1042">(codex_ · antigravity_ · grok_bridge)</text>
 
   <rect class="stepDark" x="1390" y="770" width="340" height="250" rx="8"/>
   <text class="numLight" x="1410" y="802">11</text>
   <text class="headLight" x="1450" y="802">워커 실행</text>
-  <text class="bodyLight" x="1410" y="830">메인 — PC 창의 Claude Code가</text>
+  <text class="bodyLight" x="1410" y="830">PC 창 — Claude Code가</text>
   <text class="bodyLight" x="1410" y="852">그대로 실행 (별도 세션 아님)</text>
-  <text class="bodyLight" x="1410" y="884">서브(데몬) — Codex·Antigravity·Grok</text>
-  <text class="bodyLight" x="1410" y="916">메인 → 서브 위임 시 delegate.js가</text>
-  <text class="bodyLight" x="1410" y="938">파이프로 서브를 부르고, 결과는</text>
-  <text class="bodyLight" x="1410" y="960">메인이 이어받는다</text>
+  <text class="bodyLight" x="1410" y="884">데몬 — Codex·Antigravity·Grok</text>
+  <text class="bodyLight" x="1410" y="916">PC 창 → 데몬 위임 시 delegate.js가</text>
+  <text class="bodyLight" x="1410" y="938">파이프로 데몬을 부르고, 결과는</text>
+  <text class="bodyLight" x="1410" y="960">Claude Code가 이어받는다</text>
   <text class="bodyLight" x="1410" y="992">같은 파일은 동시에 만지지 않는다</text>
 
   <rect class="step" x="900" y="1082" width="420" height="90" rx="8"/>
   <text class="num" x="920" y="1114">12</text>
   <text class="head" x="960" y="1114">결과 기록</text>
-  <text class="body" x="920" y="1142">메인: transcript(.jsonl) · 서브: 메시지 JSON</text>
+  <text class="body" x="920" y="1142">Claude Code: transcript(.jsonl) · 데몬: 메시지 JSON</text>
 
   <rect class="stepGreen" x="90" y="952" width="340" height="110" rx="8"/>
   <text class="num" x="110" y="984">13</text>
@@ -164,5 +164,5 @@
   <path class="flow" d="M 900 1100 L 670 1100 L 670 1006 L 430 1006"/>
   <text class="edgeLabel" x="670" y="1086" text-anchor="middle">폴링 응답</text>
 
-  <text class="note" x="60" y="1270">2026-09-17 현행화 · 메인 워커 Antigravity → Claude Code · 최종 방식 = PC 창 + 콘솔 주입 · Grok 추가</text>
+  <text class="note" x="60" y="1270">2026-09-17 현행화 · PC 창 워커 Antigravity → Claude Code · 최종 방식 = PC 창 + 콘솔 주입 · Grok 추가 · 메인/서브 호칭 폐지</text>
 </svg>

@@ -1,6 +1,6 @@
 # One-Stop Multi-Agent Mobile Console (원스톱 멀티 에이전트 모바일 콘솔)
 
-> 어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종(Claude Code · Codex CLI · Antigravity)을 연결하는 무설치 포터블 스타터 킷.
+> 어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 4종(Claude Code · Codex CLI · Antigravity · Grok)을 연결하는 무설치 포터블 스타터 킷.
 > 폰은 북마크 하나, PC는 켜 두기만. 지시는 폰에서, 실행과 파일은 전부 PC 안에서.
 
 **소개 페이지:** https://one-stop-multi-agent-mobile-console.vercel.app/
@@ -16,9 +16,9 @@
 | 설치 | 없음 — 폴더 하나 (cloudflared 실행 파일 내장) |
 | 네트워크 설정 | 없음 — 포트 개방·공유기·VPN 불필요 (Cloudflare 터널) |
 | 폰 접속 | 통합 허브 주소 1개 북마크 → 켜진 PC마다 탭(상태등) → 탭 터치로 PC 간 즉시 전환 |
-| 메인 워커 | 🤖 **Claude Code** — PC의 진짜 터미널 창에서 대화형. 폰이 그 창을 미러링 |
-| 서브 워커 | ⚡ **Codex CLI** · 🪐 **Antigravity** — 백그라운드 데몬 (화면 없음) |
-| 콘솔 탭 | Claude Code / Codex / Antigravity / 프로젝트 + 업로드 · 긴급 정지 · 요약·상세·전체 보기 |
+| PC 창 대화형 | 🤖 **Claude Code** — PC의 진짜 터미널 창에서 대화형. 폰이 그 창을 미러링 |
+| 데몬 | ⚡ **Codex CLI** · 🪐 **Antigravity** · **Grok** — 백그라운드 데몬 (화면 없음) |
+| 콘솔 탭 | Claude Code / Codex / Antigravity / Grok / M&A 제안서 + 업로드 · 긴급 정지 · 요약·상세·전체 보기 |
 | 데이터 | 클라우드에는 "어느 PC가 켜져 있고 주소가 무엇인가"만. 대화·파일·결과물은 PC 밖으로 안 나감 |
 
 ## 핵심 구조
@@ -45,7 +45,7 @@
 | 쓰는 기술 | Cloudflare Tunnel (`cloudflared`) | 세션 기록 읽기 + `AttachConsole`·`WriteConsoleInput` | 자식 프로세스 + stdin/stdout 파이프 |
 | 없으면 | 같은 Wi-Fi 안에서만 쓸 수 있다 | 폰에서 PC 창을 보지도 쓰지도 못한다 | 워커 한 명만 쓰게 된다 |
 | 설정 부담 | **없음** — 포트 개방·고정 IP 불필요 | **없음** — PC 창만 띄워두면 됨 | **없음** — CLI 만 깔려 있으면 됨 |
-| 관련 파일 | `tunnel.js` · `hub_deploy.js` · `cloudflared.exe` | `main_worker_bridge.js` · `console_inject.ps1` · `proc_cwd.ps1` | `delegate.js` · `codex_bridge.js` · `antigravity_bridge.js` |
+| 관련 파일 | `tunnel.js` · `hub_deploy.js` · `cloudflared.exe` | `main_worker_bridge.js` · `console_inject.ps1` · `proc_cwd.ps1` | `delegate.js` · `codex_bridge.js` · `antigravity_bridge.js` · `grok_bridge.js` |
 
 ```
 폰 (LTE · 집 밖 어디든)
@@ -61,7 +61,7 @@ PC 의 진짜 Claude Code 창
 
 **①②가 겹쳐야 밖에서 PC 창을 그대로 쓰는** 일이 성립한다. 터널만 있으면 연결은 되는데 볼 게 없고,
 미러링만 있으면 볼 수는 있는데 집 안에서만 된다.
-여기에 **③**이 더해져야 **워커 셋을 한 작업장에서 동시에** 쓸 수 있다.
+여기에 **③**이 더해져야 **데몬 워커 3종을 한 작업장에서 동시에** 쓸 수 있다.
 
 ## 도해
 
@@ -80,7 +80,7 @@ PC 의 진짜 Claude Code 창
 **B. 접속 — 폰에서 한 번**
 5. 고정 허브 주소(북마크) 열기
 6. 허브가 장부를 읽어 켜진 PC마다 탭을 띄움 — 초록불은 그 PC가 **실제로 응답 중**이라는 뜻
-7. 터널 → `server.js` → 4탭 콘솔. PIN 1회 → 세션 쿠키, 이후 자동
+7. 터널 → `server.js` → 5탭 콘솔. PIN 1회 → 세션 쿠키, 이후 자동
 
 **C. 지시 · 실행 · 회신 — 반복**
 8. 탭을 고르고 지시 (텍스트, 사진·파일 업로드, 추천 칩)
@@ -89,24 +89,26 @@ PC 의 진짜 Claude Code 창
 11. 메인 결과는 세션 기록에, 서브 결과는 각자 메시지 파일에 쌓임
 12. 폰이 1.2~1.5초 폴링으로 표시 → 8로 반복
 
-## 워커 3종
+## 워커 4종
 
 | 구분 | 워커 | 모델 | 구동 |
 |---|---|---|---|
 | **메인** | 🤖 Claude Code | Opus 5 | **PC 터미널 창에서 대화형** · 폰이 미러링 |
 | 서브 1 | ⚡ Codex | GPT-5.6-terra | 백그라운드 데몬 (`codex exec`) |
 | 서브 2 | 🪐 Antigravity | Gemini 3.8 Flash | 백그라운드 데몬 (`agy -p`, 대화 맥락 유지) |
+| 서브 3 | Grok | grok-4.6 | 백그라운드 데몬 (`grok -p "<지시>" -m grok-4.6 --resume <세션ID> --always-approve`) · CLI 로그인 세션 사용(API 키 미사용) · 최초 `--session-id <UUID>`, 이후 `--resume <UUID>` · `grok_bridge.js` (`/api/grok-status`, `/api/grok-send`) |
 
 메인은 서브에게 일을 넘길 수 있다.
 
 ```bash
 node delegate.js codex "이 스크립트 버그 고쳐줘"
 node delegate.js agy   "이 문서 3줄로 요약해줘"
+node delegate.js grok  "이 작업을 검토해줘"
 ```
 
-## 서브 워커란 무엇인가 — 부하도 보조도 아니다
+## 데몬 워커란 무엇인가 — 부하도 보조도 아니다
 
-**메인 / 서브는 계급이 아니라 '앉은 자리'다.** 세 워커 모두 같은 작업 폴더에서
+**메인 / 서브는 계급이 아니라 '앉은 자리'다.** 네 워커 모두 같은 작업 폴더에서
 파일을 읽고 쓰고 명령을 실행한다 — **능력은 대등하다.**
 차이는 창이 있고 대화가 이어지느냐(메인), 부를 때 일어나느냐(서브)뿐이다.
 
@@ -114,7 +116,7 @@ node delegate.js agy   "이 문서 3줄로 요약해줘"
 
 | 모드 | 어떻게 | 성격 |
 |---|---|---|
-| **독립 실행** | 폰의 Codex·Antigravity 탭에서 직접 지시 → 스스로 완결 (메인은 모름) | **독립 작업자** |
+| **독립 실행** | 폰의 Codex·Antigravity·Grok 탭에서 직접 지시 → 스스로 완결 (메인은 모름) | **독립 작업자** |
 | **위임 수행** | 메인이 `delegate.js` 로 호출 → 결과를 메인이 받아 이어감 | **보조** |
 
 같은 워커가 상황에 따라 성격이 바뀐다. 그래서 '보조'로 못 박으면 틀리고, '부하'는 더더욱 아니다.
@@ -129,7 +131,7 @@ node delegate.js agy   "이 문서 3줄로 요약해줘"
 
 ```
 ① 폰 → 해당 탭에서 직접 지시      메인을 거치지 않음 · 가장 빠름
-② PC 터미널에서 직접              codex exec "지시"  /  agy -p "지시"
+② PC 터미널에서 직접              codex exec "지시"  /  agy -p "지시"  /  grok -p "지시" -m grok-4.6 --always-approve
 ③ 메인에게 시키기                 node delegate.js codex "지시"
 ```
 
@@ -145,15 +147,16 @@ node delegate.js agy   "이 문서 3줄로 요약해줘"
 ```
 📁 원스톱_멀티에이전트_모바일콘솔_스타터킷/
 ├── 🚀모바일콘솔_가동.bat        # 실행기 — 더블 클릭 한 번
-├── server.js                   # 콘솔 풀스택 서버 (4탭 UI + API, 7890)
+├── server.js                   # 콘솔 풀스택 서버 (5탭 UI + API, 7890)
 ├── tunnel.js / start_all.js    # 터널 개통 + 장부 등록 + 허브 배포 + 60초 하트비트
 │
 ├── main_worker_bridge.js       # 메인: 창 찾기·띄우기, 기록 읽기, 지시 주입
 ├── console_inject.ps1          # AttachConsole + WriteConsoleInput 로 타이핑
 ├── proc_cwd.ps1                # 창별 작업 폴더 판별 — 다른 프로젝트 창 제외
 │
-├── codex_bridge.js             # 서브1 Codex
-├── antigravity_bridge.js       # 서브2 Antigravity
+├── codex_bridge.js             # Codex (데몬)
+├── antigravity_bridge.js       # Antigravity (데몬)
+├── grok_bridge.js              # Grok (데몬)
 ├── delegate.js                 # 메인 → 서브 위임
 │
 ├── gh_token.js                 # 토큰 조회 (소스 하드코딩 금지)
@@ -178,6 +181,8 @@ node delegate.js agy   "이 문서 3줄로 요약해줘"
 - **PowerShell 출력은 한글을 깨뜨린다** — 한글 경로 비교가 실패한다. `OutputEncoding` 을 UTF-8 로 고정할 것
 - **cmd 는 배치 파일을 옛 코드페이지로 읽는다** — 한글 UTF-8 배치는 명령줄이 깨진다. 배치는 ASCII 로
 - **`accept` 에 확장자 목록을 쓰면** 안드로이드가 엉뚱한 선택창을 띄운다. MIME 으로 지정할 것
+- **Windows에서 CLI를 붙일 때 `shell:true`를 쓰면** 공백 있는 프롬프트가 인자로 쪼개진다
+- **`.cmd`를 shell 없이 spawn 하면** `EINVAL`이 난다 — npm 전역 설치의 node 트램폴린을 직접 실행할 것
 
 ## 변경 이력
 

@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One-Stop Multi-Agent Mobile Console — 스마트폰에서 내 PC의 AI 워커 3종을 지휘한다</title>
-<meta name="description" content="어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종(Claude Code·Codex·Antigravity)을 연결하는 무설치 포터블 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만, 여러 대면 탭으로 전환. 클라우드에는 대화도 파일도 남지 않는다.">
+<title>One-Stop Multi-Agent Mobile Console — 스마트폰에서 내 PC의 AI 워커 4종을 지휘한다</title>
+<meta name="description" content="어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 4종(Claude Code·Codex·Antigravity·Grok)을 연결하는 무설치 포터블 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만, 여러 대면 탭으로 전환. 클라우드에는 대화도 파일도 남지 않는다.">
 <meta property="og:title" content="One-Stop Multi-Agent Mobile Console">
-<meta property="og:description" content="스마트폰에서 내 PC의 AI 워커 3종을 지휘한다. PC 여러 대는 탭으로 전환. 무설치 포터블 스타터 킷.">
+<meta property="og:description" content="스마트폰에서 내 PC의 AI 워커 4종을 지휘한다. PC 여러 대는 탭으로 전환. 무설치 포터블 스타터 킷.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://one-stop-multi-agent-mobile-console.vercel.app/">
 <meta property="og:image" content="https://one-stop-multi-agent-mobile-console.vercel.app/docs/관계도.png">
@@ -54,10 +54,10 @@
   .cta{display:flex;flex-wrap:wrap;gap:12px}
   .cta-note{margin:14px 0 0;font-size:14px;color:var(--faint);line-height:1.7}
   .cta-note b{color:var(--dim)}
-  .vendbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-  .vb{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--dim);background:rgba(148,163,184,.07);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  .vendbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:22px}
+  .vb{display:inline-flex;align-items:center;gap:7px;min-width:0;flex-wrap:wrap;font-size:13px;color:var(--dim);background:rgba(148,163,184,.07);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
   .vb i{width:8px;height:8px;border-radius:99px;flex:0 0 auto}
-  .vb small{font-size:11px;color:var(--faint);margin-left:1px}
+  .vb small{font-size:11px;color:var(--faint);margin-left:15px;white-space:nowrap}
   /* phone mockup (CSS only) */
   .phone{position:relative;margin:0 auto;width:min(300px,82vw);border-radius:40px;padding:11px;background:linear-gradient(160deg,#28344a,#131b2b);box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.07)}
   .phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:82px;height:6px;border-radius:99px;background:#0a0f1a;z-index:2}
@@ -82,8 +82,8 @@
   h2{font-size:clamp(24px,4.2vw,36px);line-height:1.25;letter-spacing:-.025em;margin:0 0 14px;font-weight:800}
   .sub{color:var(--dim);font-size:17px;margin:0 0 38px;max-width:64ch}
   .grid{display:grid;gap:16px}
-  .g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}
-  @media(min-width:760px){.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}}
+  .g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}.console-grid{grid-template-columns:1fr}
+  @media(min-width:760px){.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}.console-grid{grid-template-columns:repeat(4,1fr)}.vendbar{grid-template-columns:repeat(4,minmax(0,1fr))}}
   .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:24px 22px}
   .card .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);margin-bottom:14px}
   .card h3{margin:0 0 8px;font-size:17px;letter-spacing:-.01em}
@@ -126,24 +126,25 @@
 <section class="hero" style="border-top:0"><div class="wrap hgrid">
   <div>
     <div class="eyebrow">무설치 포터블 · 내 PC에서 구동 · 클라우드에 데이터 없음</div>
-    <h1>스마트폰에서,<br><em>내 PC의 AI 워커 3종</em>을<br>지휘한다</h1>
-    <p class="lede">어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종을 연결하는 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만. PC가 여러 대면 폰 화면 상단 탭으로 번갈아 지휘한다. 지시는 폰에서, 실행과 파일은 전부 PC 안에서.</p>
+    <h1>스마트폰에서,<br><em>내 PC의 AI 워커 4종</em>을<br>지휘한다</h1>
+    <p class="lede">어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 4종을 연결하는 스타터 킷. 폰은 북마크 하나, PC는 켜 두기만. PC가 여러 대면 폰 화면 상단 탭으로 번갈아 지휘한다. 지시는 폰에서, 실행과 파일은 전부 PC 안에서.</p>
     <div class="cta">
       <a class="btn btn-primary" href="#how">작동 방식 보기</a>
       <a class="btn btn-ghost" href="https://github.com/SUNWOONGKYU/one-stop-multi-agent-mobile-console" target="_blank" rel="noopener">GitHub 저장소</a>
     </div>
     <p class="cta-note"><b>필요한 것</b> — Node.js가 깔린 Windows PC 1대, 스마트폰 브라우저. 포트 개방·공유기 설정·앱 설치 전부 없음.</p>
     <div class="vendbar">
-      <span class="vb"><i style="background:#d97706"></i>Claude Code <small>Anthropic · 메인</small></span>
-      <span class="vb"><i style="background:#f59e0b"></i>Codex CLI <small>OpenAI · 서브1</small></span>
-      <span class="vb"><i style="background:#60a5fa"></i>Antigravity <small>Google · 서브2</small></span>
+      <span class="vb"><i style="background:#d97706"></i>Claude Code <small>Anthropic</small></span>
+      <span class="vb"><i style="background:#f59e0b"></i>Codex CLI <small>OpenAI</small></span>
+      <span class="vb"><i style="background:#60a5fa"></i>Antigravity <small>Google</small></span>
+      <span class="vb"><i style="background:#f97316"></i>Grok <small>xAI</small></span>
     </div>
   </div>
   <div>
     <div class="phone">
       <div class="screen">
         <div class="s-top"><b>노트북 · 프로젝트 A</b><span>⇄ PC 전환</span></div>
-        <div class="s-tabs"><span class="on">🤖 Claude Code</span><span>⚡ Codex</span><span>🪐 Antigravity</span><span>📁 파일</span></div>
+        <div class="s-tabs"><span class="on">Claude Code</span><span>Codex</span><span>Antigravity</span><span>Grok</span><span>M&amp;A 제안서</span></div>
         <div class="s-chat">
           <div class="bub me">보고서 표 3개를 그래프로 바꿔서 다시 만들어 줘</div>
           <div class="bub ai">표 3개를 막대·선·도넛으로 변환 중… 파일 2개 수정<small>Claude Code · PC 창 · 작업 중</small></div>
@@ -160,7 +161,7 @@
 <section><div class="wrap">
   <p class="kicker">Problem</p>
   <h2>AI 워커에게 일을 시키려면<br>결국 컴퓨터 앞에 앉아야 합니다</h2>
-  <p class="sub">Claude Code, Codex, Antigravity — 셋 다 PC에서 돕니다. 자리를 뜨는 순간 지시도, 확인도 끊깁니다. 원격 데스크톱은 무겁고, 터미널 공유는 폰에서 쓸 물건이 아닙니다.</p>
+  <p class="sub">Claude Code, Codex, Antigravity, Grok — 넷 다 PC에서 돕니다. 자리를 뜨는 순간 지시도, 확인도 끊깁니다. 원격 데스크톱은 무겁고, 터미널 공유는 폰에서 쓸 물건이 아닙니다.</p>
   <div class="grid g3">
     <div class="card"><div class="ic">🚶</div><h3>자리를 뜨면 끊긴다</h3><p>외출·이동·회의 중에는 돌아가는 작업을 볼 수도, 다음 지시를 줄 수도 없다.</p></div>
     <div class="card"><div class="ic">🧩</div><h3>워커마다 창이 다르다</h3><p>IDE 대화창, 터미널 두 개. 폰에서 셋을 한 화면에 모을 방법이 없었다.</p></div>
@@ -175,7 +176,7 @@
   <div class="steps">
     <div class="step"><h3>PC에서 Claude Code 창 + 실행기</h3><p>프로젝트 폴더에서 Claude Code 창 하나를 띄웁니다(없으면 서버가 자동으로 띄움). 실행기를 더블 클릭하면 콘솔 서버가 뜨고, 내장 cloudflared로 공개 https 주소를 받아 기기 장부에 등록합니다.</p></div>
     <div class="step"><h3>폰에서 북마크 열기</h3><p>통합 허브가 켜진 PC마다 탭을 띄웁니다. 허브는 각 PC의 상태를 4초마다 직접 확인해, 실제로 응답할 때만 탭에 초록불을 켭니다. PC별 전용 주소도 있습니다.</p></div>
-    <div class="step"><h3>지시하고 결과 받기</h3><p>탭을 고르고 지시. 메인(Claude Code)은 PC 창이 그대로 비치고 폰 지시가 그 창 콘솔에 그대로 타이핑됩니다. 서브(Codex·Antigravity)는 그때 데몬이 일어나 실행합니다. 긴급 정지는 언제나.</p></div>
+    <div class="step"><h3>지시하고 결과 받기</h3><p>탭을 고르고 지시. 메인(Claude Code)은 PC 창이 그대로 비치고 폰 지시가 그 창 콘솔에 그대로 타이핑됩니다. 서브(Codex·Antigravity·Grok)는 그때 데몬이 일어나 실행합니다. 긴급 정지는 언제나.</p></div>
   </div>
   <figure class="fig" style="margin:34px 0 0">
     <img src="docs/흐름도.svg" alt="작업 흐름도 — 기동 A, 접속 B, 지시 C 3개 밴드를 스마트폰·클라우드·작업 PC·AI 워커 네 레인으로 표시" width="1820" height="1320" loading="lazy">
@@ -195,10 +196,10 @@
     <thead><tr><th>구성 요소</th><th>역할</th><th>어디서</th></tr></thead>
     <tbody>
       <tr><td>실행기 <code>.bat</code></td><td>더블 클릭 한 번으로 콘솔 서버와 터널을 기동. Node.js만 있으면 어느 PC든. 메인 워커 창 단독 실행기, 서브2 단독 실행기도 별도로 있다.</td><td>작업 PC</td></tr>
-      <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(4탭)과 API를 한 파일로. PIN·인증 검사, 업로드 처리. 폰은 1.2~1.5초 폴링, WebSocket 없음.</td><td>작업 PC</td></tr>
+      <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(5탭)과 API를 한 파일로. PIN·인증 검사, 업로드 처리. 폰은 1.2~1.5초 폴링, WebSocket 없음.</td><td>작업 PC</td></tr>
       <tr><td><code>tunnel.js</code></td><td>내장 cloudflared로 공개 https 주소 발급, 기기 장부 API에 등록, 60초 하트비트, 허브에 devices.json 배포.</td><td>작업 PC</td></tr>
       <tr><td>메인 워커 브릿지</td><td><code>main_worker_bridge</code>가 작업 폴더 기준으로 PC 창을 찾아 대화(transcript)를 읽고 지시를 주입(<code>console_inject</code>). <code>proc_cwd</code>가 창별 작업 폴더를 판별.</td><td>작업 PC</td></tr>
-      <tr><td>서브 워커 브릿지</td><td><code>codex_bridge</code>·<code>antigravity_bridge</code>가 데몬을 실행해 결과를 저장하고, <code>delegate</code>가 메인 → 서브 위임을 중개.</td><td>작업 PC</td></tr>
+      <tr><td>서브 워커 브릿지</td><td><code>codex_bridge</code>·<code>antigravity_bridge</code>·<code>grok_bridge</code>가 데몬을 실행해 결과를 저장하고, <code>delegate</code>가 메인 → 서브 위임을 중개.</td><td>작업 PC</td></tr>
       <tr><td>Cloudflare 터널</td><td>PC 안 7890 포트 ↔ 공개 https. 포트 개방·공유기 설정 없음, SSL 자동.</td><td>클라우드</td></tr>
       <tr><td>통합 허브</td><td>정적 페이지 1장. 장부를 읽어 켜진 PC마다 탭을 띄우고, 각 PC를 4초마다 직접 확인해 실제 응답할 때만 초록불. PC별 전용 주소도 발급.</td><td>클라우드</td></tr>
       <tr><td>기기 장부 (Gist)</td><td>어느 PC가 켜져 있고 주소가 무엇인지. 읽을 때는 API(무캐시) — raw CDN 캐시로 옛 주소를 덮어쓰던 사고를 막았다.</td><td>클라우드</td></tr>
@@ -210,25 +211,26 @@
     <div class="card"><div class="ic">🪞</div><h3>② 미러링</h3><p>읽기는 세션 transcript(.jsonl)를 읽어 말풍선으로, 쓰기는 콘솔 주입으로 PC 창에 그대로 타이핑. 이 둘이 PC 창과 폰을 잇는다.</p></div>
     <div class="card"><div class="ic">🔧</div><h3>③ 프로세스 파이프 위임</h3><p><code>delegate.js</code>가 자식 프로세스를 띄워 stdin/stdout으로 서브 워커를 부린다.</p></div>
   </div>
-  <p class="cta-note" style="margin-top:16px">①②가 겹쳐야 밖에서 PC 창을 그대로 쓸 수 있고, 여기에 ③이 더해져야 워커 셋을 한 작업장에서 동시에 쓴다.</p>
+  <p class="cta-note" style="margin-top:16px">①②가 겹쳐야 밖에서 PC 창을 그대로 쓸 수 있고, 여기에 ③이 더해져야 서브 워커 3종을 한 작업장에서 동시에 쓴다.</p>
 </div></section>
 
 <section><div class="wrap">
   <p class="kicker">Workers</p>
-  <h2>메인 하나, 서브 둘 — 일에 맞는 워커를 골라 지시</h2>
-  <p class="sub">셋 다 PC 안에서 실행됩니다. 폰은 지시와 확인만 합니다.</p>
-  <div class="grid g3">
-    <div class="card"><div class="ic">🤖</div><h3>Claude Code <span class="tag">메인</span></h3><p>PC 터미널 창에서 대화형으로 돈다. 폰은 그 창의 대화를 그대로 미러링해 보고, 폰 지시는 콘솔 입력으로 그 창에 그대로 타이핑된다. 긴급 정지는 그 창에 Ctrl+C 주입.</p></div>
-    <div class="card"><div class="ic">⚡</div><h3>Codex <span class="tag">서브1</span></h3><p>데몬으로 돈다. 시킬 때 <code>codex exec</code>가 일어나 실행하고 끝나면 종료. 화면 없이 결과만 남는다.</p></div>
-    <div class="card"><div class="ic">🪐</div><h3>Antigravity <span class="tag">서브2</span></h3><p>데몬으로 돈다. <code>agy -p</code> + <code>--conversation</code>으로 맥락을 유지하며, 시킬 때만 일어난다.</p></div>
+  <h2>메인 하나, 서브 셋 — 일에 맞는 워커를 골라 지시</h2>
+  <p class="sub">넷 다 PC 안에서 실행됩니다. 폰은 지시와 확인만 합니다.</p>
+  <div class="grid g4">
+    <div class="card"><h3>Claude Code <span class="tag">메인</span></h3><p>PC 터미널 창에서 대화형으로 돈다. 폰은 그 창의 대화를 그대로 미러링해 보고, 폰 지시는 콘솔 입력으로 그 창에 그대로 타이핑된다. 긴급 정지는 그 창에 Ctrl+C 주입.</p></div>
+    <div class="card"><h3>Codex <span class="tag">서브1</span></h3><p>데몬으로 돈다. 시킬 때 <code>codex exec</code>가 일어나 실행하고 끝나면 종료. 화면 없이 결과만 남는다.</p></div>
+    <div class="card"><h3>Antigravity <span class="tag">서브2</span></h3><p>데몬으로 돈다. <code>agy -p</code> + <code>--conversation</code>으로 맥락을 유지하며, 시킬 때만 일어난다.</p></div>
+    <div class="card"><h3>Grok <span class="tag">서브3</span></h3><p>데몬으로 돈다. CLI 로그인 세션을 쓰며 API 키는 쓰지 않는다. 최초 <code>--session-id</code>, 이후 <code>--resume</code>으로 맥락을 유지한다.</p></div>
   </div>
   <div class="card" style="margin-top:20px">
     <h3 style="margin:0 0 8px;font-size:17px">서브 워커는 부하도 보조도 아니다 — 앉은 자리</h3>
-    <p style="color:var(--dim);font-size:14.5px;margin:0 0 16px">메인/서브는 계급이 아니라 '앉은 자리'다. 세 워커 모두 같은 작업 폴더에서 읽고·쓰고·실행한다 — 능력은 대등하다. 독립 실행(폰 탭에서 직접 지시, 메인은 모름)일 때는 독립 작업자이고, 위임 수행(메인이 호출)일 때만 보조 성격을 띤다.</p>
+    <p style="color:var(--dim);font-size:14.5px;margin:0 0 16px">메인/서브는 계급이 아니라 '앉은 자리'다. 네 워커 모두 같은 작업 폴더에서 읽고·쓰고·실행한다 — 능력은 대등하다. 독립 실행(폰 탭에서 직접 지시, 메인은 모름)일 때는 독립 작업자이고, 위임 수행(메인이 호출)일 때만 보조 성격을 띤다.</p>
     <div class="grid g3">
       <div><b style="font-size:14px">① 폰 → 해당 탭 직접 지시</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px">메인을 거치지 않음 · 가장 빠름</p></div>
-      <div><b style="font-size:14px">② PC 터미널에서 직접</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>codex exec</code> · <code>agy -p</code></p></div>
-      <div><b style="font-size:14px">③ 메인에게 시키기</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>node delegate.js codex "지시"</code></p></div>
+      <div><b style="font-size:14px">② PC 터미널에서 직접</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>codex exec</code> · <code>agy -p</code> · <code>grok -p</code></p></div>
+      <div><b style="font-size:14px">③ 메인에게 시키기</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>node delegate.js grok "지시"</code></p></div>
     </div>
     <p class="cta-note" style="margin-top:16px"><b>같은 파일을 두 워커가 동시에 만지지 않는다.</b> 서브 워커도 파일을 쓴다 — 동시에 고치면 나중에 저장한 쪽이 이기고 되돌릴 수단이 없다.</p>
   </div>
@@ -236,12 +238,13 @@
 
 <section><div class="wrap">
   <p class="kicker">Console</p>
-  <h2>탭 4개, 그리고 긴급 정지</h2>
-  <div class="grid g4">
-    <div class="card"><h3>🤖 Claude Code</h3><p>메인. PC 창 대화 미러 + 지시 입력. 폰 지시가 그 창 콘솔에 그대로 타이핑된다.</p></div>
-    <div class="card"><h3>⚡ Codex</h3><p>서브1. 지시 → 데몬 실행 → 결과. 상태 라벨(작업 중/대기)과 전체 히스토리.</p></div>
-    <div class="card"><h3>🪐 Antigravity</h3><p>서브2. Codex와 같은 데몬 방식. 사진·파일 업로드 후 분석 지시.</p></div>
-    <div class="card"><h3>📑 프로젝트 탭</h3><p>프로젝트 전용 화면(예: M&amp;A 제안서 배포·매칭). 파일 API는 작업 폴더 밖을 차단.</p></div>
+  <h2>탭 5개, 그리고 긴급 정지</h2>
+  <div class="grid g4 console-grid">
+    <div class="card"><h3>Claude Code</h3><p>메인. PC 창 대화 미러 + 지시 입력. 폰 지시가 그 창 콘솔에 그대로 타이핑된다.</p></div>
+    <div class="card"><h3>Codex</h3><p>서브1. 지시 → 데몬 실행 → 결과. 상태 라벨(작업 중/대기)과 전체 히스토리.</p></div>
+    <div class="card"><h3>Antigravity</h3><p>서브2. Codex와 같은 데몬 방식. 사진·파일 업로드 후 분석 지시.</p></div>
+    <div class="card"><h3>Grok</h3><p>서브3. CLI 로그인 세션으로 실행하며, <code>grok_bridge</code>가 상태 확인과 지시 전송을 맡는다.</p></div>
+    <div class="card"><h3>M&amp;A 제안서</h3><p>프로젝트 전용 화면(예: M&amp;A 제안서 배포·매칭). 파일 API는 작업 폴더 밖을 차단.</p></div>
   </div>
   <p class="cta-note" style="margin-top:18px">공통 — 📎 업로드 하나(폰 기본 선택창, 중간 팝업 없음), 대화 보기 <b>요약/상세/전체</b>, <b>긴급 정지</b>(메인은 Ctrl+C 주입, 서브는 프로세스 종료), 허브 상단 <b>PC 탭</b>으로 다른 컴퓨터로 즉시 이동.</p>
 </div></section>

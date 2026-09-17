@@ -3,7 +3,7 @@
 <style>
   :root{
     --bg:#f6f7fb; --card:#fff; --ink:#111827; --dim:#6b7280; --line:#d8dce6;
-    --main:#f59e0b; --sub1:#3b82f6; --sub2:#10b981; --pipe:#8b5cf6; --warn:#ef4444;
+    --main:#f59e0b; --sub1:#3b82f6; --sub2:#10b981; --sub3:#a78bfa; --pipe:#8b5cf6; --warn:#ef4444;
   }
   @media (prefers-color-scheme: dark){
     :root{ --bg:#0b0e17; --card:#141a2a; --ink:#e8ecf5; --dim:#94a3b8; --line:#28334e; }
@@ -27,7 +27,7 @@
   th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
   th{background:rgba(128,128,128,.10);font-weight:700}
   .tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:800;color:#fff}
-  .t-main{background:var(--main)} .t-s1{background:var(--sub1)} .t-s2{background:var(--sub2)}
+  .t-main{background:var(--main)} .t-s1{background:var(--sub1)} .t-s2{background:var(--sub2)} .t-s3{background:var(--sub3)}
   .t-pipe{background:var(--pipe)} .t-warn{background:var(--warn)}
   .note{border-left:4px solid var(--main);background:rgba(245,158,11,.10);
         padding:11px 14px;border-radius:0 10px 10px 0;font-size:13.5px;margin-top:12px}
@@ -41,7 +41,7 @@
 <div class="wrap">
 
 <h1>원스톱 멀티 에이전트 모바일 콘솔</h1>
-<div class="sub">시스템 관계도 · 데이터 흐름도</div>
+<div class="sub">4대 AI · 시스템 관계도 · 데이터 흐름도</div>
 <div class="stamp">현행화 2026-09-17 · 최종 방식 = <b>PC 창 + 콘솔 주입</b> (PTY·브라우저 터미널 폐기)</div>
 
 <h2>1. 전체 관계도</h2>
@@ -66,18 +66,19 @@
    (포커스 안 뺏음, 한글 OK)                    │
                                               ▼
                               ┌───────────────────────────────┐
-                              │  서브 워커 브릿지 (데몬 호출)   │
-                              │  codex_bridge / antigravity   │
-                              └──┬──────────────────┬─────────┘
-                                 ▼                  ▼
-   🤖 Claude Code            ⚡ Codex           🪐 Antigravity
-   Opus 5 · PC 창 대화형      GPT-5.6-terra      Gemini 3.8 Flash
-   <b>메인 워커</b>                <b>서브 워커 1</b>        <b>서브 워커 2</b>
+                              │  데몬 브릿지 (호출 시 기동)   │
+                              │  codex / antigravity / grok   │
+                              └──┬────────────┬────────────┬──┘
+                                 ▼            ▼            ▼
+   Claude Code              Codex       Antigravity      Grok
+   Opus 5 · PC 창 대화형     GPT-5.6-terra Gemini 3.8 Flash grok-4.6
+   <b>PC 창 대화형</b>           <b>데몬</b>          <b>데몬</b>        <b>데몬</b>
 </pre>
 <div class="legend">
-  <span><i class="dot" style="background:var(--main)"></i>메인 — PC 창에서 대화형</span>
-  <span><i class="dot" style="background:var(--sub1)"></i>서브1 — 데몬</span>
-  <span><i class="dot" style="background:var(--sub2)"></i>서브2 — 데몬</span>
+  <span><i class="dot" style="background:var(--main)"></i>Claude Code — PC 창에서 대화형</span>
+  <span><i class="dot" style="background:var(--sub1)"></i>Codex — 데몬</span>
+  <span><i class="dot" style="background:var(--sub2)"></i>Antigravity — 데몬</span>
+  <span><i class="dot" style="background:var(--sub3)"></i>Grok — 데몬</span>
 </div>
 </div>
 
@@ -118,7 +119,7 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 <div class="legend">
   <span><i class="dot" style="background:var(--pipe)"></i>① 원격 터널링 — 밖에서 PC까지 닿는 길</span>
   <span><i class="dot" style="background:var(--main)"></i>② 미러링 — PC 창과 폰을 하나로 잇는 것</span>
-  <span><i class="dot" style="background:var(--sub1)"></i>③ 프로세스 파이프 위임 — 서브 워커를 부리는 것</span>
+  <span><i class="dot" style="background:var(--sub1)"></i>③ 프로세스 파이프 위임 — 데몬 워커를 부리는 것</span>
 </div>
 </div>
 
@@ -129,20 +130,20 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 <tr><td>쓰는 기술</td><td>Cloudflare Tunnel (cloudflared)</td><td>transcript 읽기 + AttachConsole·WriteConsoleInput</td><td>자식 프로세스 생성 + stdin/stdout 파이프</td></tr>
 <tr><td>없으면</td><td>같은 Wi-Fi 안에서만 쓸 수 있다</td><td>폰에서 PC 창을 보지도 쓰지도 못한다</td><td>워커 한 명만 쓰게 된다</td></tr>
 <tr><td>설정 부담</td><td><b>없음</b> — 포트 개방·고정 IP 불필요</td><td><b>없음</b> — PC 창만 띄워두면 됨</td><td><b>없음</b> — CLI 만 깔려 있으면 됨</td></tr>
-<tr><td>관련 파일</td><td><code>tunnel.js</code> · <code>hub_deploy.js</code> · <code>cloudflared.exe</code></td><td><code>main_worker_bridge.js</code> · <code>console_inject.ps1</code> · <code>proc_cwd.ps1</code></td><td><code>delegate.js</code> · <code>codex_bridge.js</code> · <code>antigravity_bridge.js</code></td></tr>
+<tr><td>관련 파일</td><td><code>tunnel.js</code> · <code>hub_deploy.js</code> · <code>cloudflared.exe</code></td><td><code>main_worker_bridge.js</code> · <code>console_inject.ps1</code> · <code>proc_cwd.ps1</code></td><td><code>delegate.js</code> · <code>codex_bridge.js</code> · <code>antigravity_bridge.js</code> · <code>grok_bridge.js</code></td></tr>
 </table>
 <div class="note">
 <b>①②가 겹쳐야 밖에서 PC 창을 그대로 쓰는</b> 일이 성립한다. 터널만 있으면 연결은 되는데 볼 게 없고,
 미러링만 있으면 볼 수는 있는데 집 안에서만 된다.<br>
-여기에 <b>③</b>이 더해져야 <b>워커 셋을 한 작업장에서 동시에</b> 쓸 수 있다.
+여기에 <b>③</b>이 더해져야 <b>워커 넷을 한 작업장에서 동시에</b> 쓸 수 있다.
 </div>
 </div>
 
-<h2>3. 서브 워커란 무엇인가 — 부하도 보조도 아니다</h2>
+<h2>3. 데몬 워커란 무엇인가 — 부하도 보조도 아니다</h2>
 <div class="card">
 <div class="note">
 <b>메인 / 서브는 계급이 아니라 '앉은 자리'다.</b>
-세 워커 모두 같은 작업 폴더에서 파일을 읽고 쓰고 명령을 실행한다 — <b>능력은 대등하다.</b>
+네 워커 모두 같은 작업 폴더에서 파일을 읽고 쓰고 명령을 실행한다 — <b>능력은 대등하다.</b>
 차이는 창이 있고 대화가 이어지느냐(메인), 부를 때 일어나느냐(서브)뿐이다.
 </div>
 </div>
@@ -152,7 +153,7 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
  서브 워커는 <b>두 가지 모드</b>로 일한다.
 
  ┌─ 【독립 실행】 ─────────────────────────────────────────────┐
- │  폰의 Codex 탭 / Antigravity 탭 → 직접 지시 → 스스로 완결     │
+ │  폰의 Codex 탭 / Antigravity 탭 / Grok 탭 → 직접 지시 → 완결  │
  │  메인은 이 일이 있었는지도 모른다                             │
  │  → 이때 서브는 <b>독립 작업자</b>                                │
  └───────────────────────────────────────────────────────────┘
@@ -181,7 +182,7 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
  서브 워커에게 일을 시키는 <b>세 가지 길</b> — 셋 다 같은 워커에게 간다
 
  ① 폰 → 해당 탭에서 직접 지시      <b>메인을 거치지 않음</b> · 가장 빠름
- ② PC 터미널에서 직접              codex exec "지시"  /  agy -p "지시"
+ ② PC 터미널에서 직접              codex exec "지시"  /  agy -p "지시"  /  grok -p "지시" -m grok-4.6 --always-approve
  ③ 메인에게 시키기                 node delegate.js codex "지시"
 
  ①이 나은 때 — 단순 작업, 빠른 답, 메인이 바쁠 때 <b>동시 진행</b>
@@ -200,15 +201,16 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
 <div class="card scroll">
 <table>
 <tr><th style="width:130px">항목</th>
-    <th><span class="tag t-main">메인</span> Claude Code</th>
-    <th><span class="tag t-s1">서브1</span> Codex</th>
-    <th><span class="tag t-s2">서브2</span> Antigravity</th></tr>
-<tr><td>구동</td><td><b>PC 창에서 대화형</b></td><td>데몬 · 떴다 죽음</td><td>데몬 · 떴다 죽음</td></tr>
-<tr><td>화면</td><td><b>PC 터미널 창</b></td><td>없음 (기록만)</td><td>없음 (기록만)</td></tr>
-<tr><td>폰에서 보기</td><td>말풍선 (transcript)</td><td>말풍선 (기록)</td><td>말풍선 (기록)</td></tr>
-<tr><td>폰에서 지시</td><td><b>콘솔 주입</b> → PC 창에 타이핑</td><td>데몬 실행</td><td>데몬 실행</td></tr>
-<tr><td>맥락 유지</td><td>세션 그대로</td><td>세션 유지</td><td><code>--conversation</code> 고정</td></tr>
-<tr><td>중단</td><td>Ctrl+C 주입</td><td>프로세스 종료</td><td>프로세스 종료</td></tr>
+    <th>Claude Code</th>
+    <th>Codex</th>
+    <th>Antigravity</th>
+    <th>Grok</th></tr>
+<tr><td>구동</td><td><b>PC 창에서 대화형</b></td><td>데몬 · 떴다 죽음</td><td>데몬 · 떴다 죽음</td><td>데몬 · 떴다 죽음</td></tr>
+<tr><td>화면</td><td><b>PC 터미널 창</b></td><td>없음 (기록만)</td><td>없음 (기록만)</td><td>없음 (기록만)</td></tr>
+<tr><td>폰에서 보기</td><td>말풍선 (transcript)</td><td>말풍선 (기록)</td><td>말풍선 (기록)</td><td>말풍선 (기록)</td></tr>
+<tr><td>폰에서 지시</td><td><b>콘솔 주입</b> → PC 창에 타이핑</td><td>데몬 실행</td><td>데몬 실행</td><td>데몬 실행</td></tr>
+<tr><td>맥락 유지</td><td>세션 그대로</td><td>세션 유지</td><td><code>--conversation</code> 고정</td><td>최초 <code>--session-id &lt;UUID&gt;</code>, 이후 <code>--resume &lt;UUID&gt;</code></td></tr>
+<tr><td>중단</td><td>Ctrl+C 주입</td><td>프로세스 종료</td><td>프로세스 종료</td><td>프로세스 종료</td></tr>
 </table>
 </div>
 
@@ -294,10 +296,12 @@ Antigravity 가 메인이던 시절과 같은 원칙입니다.
       │
       │  node delegate.js codex "지시"
       │  node delegate.js agy   "지시"
+      │  node delegate.js grok  "지시"
       ▼
  delegate.js
       ├──▶ codex_bridge        → codex exec  → 결과 반환
-      └──▶ antigravity_bridge  → agy -p      → 결과 반환
+      ├──▶ antigravity_bridge  → agy -p      → 결과 반환
+      └──▶ grok_bridge         → grok -p     → 결과 반환
       │
       ▼
  결과가 해당 탭 대화에 쌓이고, 메인 워커도 그 답을 받아본다

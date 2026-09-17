@@ -3,7 +3,7 @@
 <style>
   :root{
     --bg:#f4f6fb; --card:#fff; --ink:#0f172a; --dim:#64748b; --line:#dbe0ea;
-    --main:#f59e0b; --sub1:#3b82f6; --sub2:#10b981; --acc:#6366f1;
+    --main:#f59e0b; --sub1:#3b82f6; --sub2:#10b981; --sub3:#a78bfa; --acc:#6366f1;
   }
   @media (prefers-color-scheme: dark){
     :root{ --bg:#0a0d16; --card:#151b2b; --ink:#e9edf7; --dim:#94a3b8; --line:#28334e; }
@@ -20,15 +20,19 @@
 
   .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
   .box{background:var(--card);border:2px solid var(--line);border-radius:14px;
-       padding:13px 15px;flex:1 1 230px;min-width:215px}
+       padding:13px 15px;flex:1 1 200px;min-width:0}
   .box .lbl{font-size:11px;font-weight:800;letter-spacing:.4px;margin-bottom:5px;
             display:inline-block;padding:2px 9px;border-radius:999px;color:#fff}
   .box .ttl{font-size:15.5px;font-weight:800;margin-bottom:3px}
   .box .dsc{font-size:12px;color:var(--dim);line-height:1.5}
-  .b-main{border-color:var(--main)} .b-s1{border-color:var(--sub1)} .b-s2{border-color:var(--sub2)}
+  .b-main{border-color:var(--main)} .b-s1{border-color:var(--sub1)} .b-s2{border-color:var(--sub2)} .b-s3{border-color:var(--sub3)}
   .b-acc{border-color:var(--acc)}
   .l-main{background:var(--main)} .l-s1{background:var(--sub1)}
-  .l-s2{background:var(--sub2)} .l-acc{background:var(--acc)}
+  .l-s2{background:var(--sub2)} .l-s3{background:var(--sub3)} .l-acc{background:var(--acc)}
+
+  .workers .box{flex:1 1 190px}
+  @media (max-width:520px){.workers .box{flex-basis:calc(50% - 6px)}}
+  @media (min-width:521px){.workers{flex-wrap:nowrap}.workers .box{flex-basis:0}}
 
   .arrow{text-align:center;font-size:17px;color:var(--dim);margin:4px 0 10px;font-weight:800}
   .hub{background:var(--card);border:2px solid var(--acc);border-radius:14px;
@@ -48,7 +52,7 @@
 
 <div class="wrap">
   <h1>원스톱 멀티 에이전트 모바일 콘솔</h1>
-  <div class="sub">PC의 Claude Code 창 하나를 폰에서 그대로 보고 지시한다</div>
+  <div class="sub">4대 AI · PC의 Claude Code 창 하나를 폰에서 그대로 보고 지시한다</div>
 
   <!-- 접점 2개 -->
   <div class="row">
@@ -73,30 +77,33 @@
 
   <div class="arrow">▼</div>
 
-  <!-- 워커 3대 -->
-  <div class="row">
-    <div class="box b-main"><span class="lbl l-main">메인 워커</span>
-      <div class="ttl">🤖 Claude Code</div>
+  <!-- 워커 4대 -->
+  <div class="row workers">
+    <div class="box b-main"><span class="lbl l-main">PC 창 대화형</span>
+      <div class="ttl">Claude Code</div>
       <div class="dsc"><b>PC 창에서 대화형</b><br>브라우저 터미널·별도 세션 없음<br>PC에 창은 <b>한 개만</b></div></div>
-    <div class="box b-s1"><span class="lbl l-s1">서브 워커 1</span>
-      <div class="ttl">⚡ Codex</div>
+    <div class="box b-s1"><span class="lbl l-s1">데몬</span>
+      <div class="ttl">Codex</div>
       <div class="dsc"><b>GPT-5.6-terra · 데몬</b><br>시킬 때만 일어남 · 화면 없음</div></div>
-    <div class="box b-s2"><span class="lbl l-s2">서브 워커 2</span>
-      <div class="ttl">🪐 Antigravity</div>
+    <div class="box b-s2"><span class="lbl l-s2">데몬</span>
+      <div class="ttl">Antigravity</div>
       <div class="dsc"><b>Gemini 3.8 Flash · 데몬</b><br>시킬 때만 일어남 · 화면 없음</div></div>
+    <div class="box b-s3"><span class="lbl l-s3">데몬</span>
+      <div class="ttl">Grok</div>
+      <div class="dsc"><b>grok-4.6 · 데몬</b><br>시킬 때만 일어남 · 화면 없음</div></div>
   </div>
 
   <div class="arrow">▼ &nbsp; <span style="color:var(--sub1)">③ 프로세스 파이프 위임</span> &nbsp; ▼</div>
   <div class="hub" style="border-color:var(--sub1)">
     <div class="dsc" style="font-family:Consolas,monospace;font-size:12.5px;color:var(--ink)">
-      node delegate.js codex "지시" &nbsp;·&nbsp; node delegate.js agy "지시"
+      node delegate.js codex "지시" &nbsp;·&nbsp; node delegate.js agy "지시" &nbsp;·&nbsp; node delegate.js grok "지시"
     </div>
     <div class="dsc" style="margin-top:7px">자식 프로세스 + stdin/stdout 파이프 — 메인이 부르면 결과를 받아본다</div>
   </div>
   <div class="hub" style="border-color:var(--line)">
-    <div class="ttl" style="font-size:14px">서브 워커는 <b>부하도 보조도 아니다</b></div>
+    <div class="ttl" style="font-size:14px">데몬 워커는 <b>부하도 보조도 아니다</b></div>
     <div class="dsc" style="margin-top:5px">
-      셋 다 같은 폴더에서 <b>읽고 · 쓰고 · 실행</b>한다 — 능력은 대등<br>
+      넷 다 같은 폴더에서 <b>읽고 · 쓰고 · 실행</b>한다 — 능력은 대등<br>
       <b>독립 실행</b> 폰 탭에서 직접 지시 → 스스로 완결 (메인은 모름)<br>
       <b>위임 수행</b> 메인이 호출 → 결과를 메인이 이어받음<br>
       메인 자리가 아니라는 뜻에서 '서브'일 뿐
@@ -116,8 +123,8 @@
     <span class="chip">🖥️ 여러 PC 탭 전환</span>
     <span class="chip">🌐 원격 터널링 — 밖에서도 접속</span>
     <span class="chip">🪞 미러링 — PC 창 그대로</span>
-    <span class="chip">🔧 프로세스 파이프 — 서브 워커 위임</span>
+    <span class="chip">🔧 프로세스 파이프 — 데몬 위임</span>
   </div>
 
-  <div class="stamp">현행화 2026-09-17 · 최종 방식 = PC 창 + 콘솔 주입 (PTY·브라우저 터미널 폐기)</div>
+  <div class="stamp">현행화 2026-09-17 · Grok 추가 · 최종 방식 = PC 창 + 콘솔 주입 (PTY·브라우저 터미널 폐기)</div>
 </div>

@@ -138,7 +138,7 @@
   <text class="headLight" x="1450" y="802">워커 실행</text>
   <text class="bodyLight" x="1410" y="830">메인 — PC 창의 Claude Code가</text>
   <text class="bodyLight" x="1410" y="852">그대로 실행 (별도 세션 아님)</text>
-  <text class="bodyLight" x="1410" y="884">서브 — Codex·Antigravity가 데몬 실행</text>
+  <text class="bodyLight" x="1410" y="884">서브(데몬) — Codex·Antigravity·Grok</text>
   <text class="bodyLight" x="1410" y="916">메인 → 서브 위임 시 delegate.js가</text>
   <text class="bodyLight" x="1410" y="938">파이프로 서브를 부르고, 결과는</text>
   <text class="bodyLight" x="1410" y="960">메인이 이어받는다</text>
@@ -164,5 +164,5 @@
   <path class="flow" d="M 900 1100 L 670 1100 L 670 1006 L 430 1006"/>
   <text class="edgeLabel" x="670" y="1086" text-anchor="middle">폴링 응답</text>
 
-  <text class="note" x="60" y="1270">2026-09-17 현행화 · 메인 워커 Antigravity → Claude Code · 최종 방식 = PC 창 + 콘솔 주입</text>
+  <text class="note" x="60" y="1270">2026-09-17 현행화 · 메인 워커 Antigravity → Claude Code · 최종 방식 = PC 창 + 콘솔 주입 · Grok 추가</text>
 </svg>

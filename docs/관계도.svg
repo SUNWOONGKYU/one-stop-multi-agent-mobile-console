@@ -51,11 +51,11 @@
   <text class="body" x="114" y="308">장부에서 PC 목록 조회 → 탭 선택</text>
 
   <rect class="card" x="90" y="344" width="410" height="228" rx="8"/>
-  <text class="cardHead" x="114" y="376">탭 4개</text>
-  <text class="body" x="114" y="404">Claude Code(메인) · Codex(서브1)</text>
-  <text class="body" x="114" y="430">Antigravity(서브2) · 프로젝트 탭</text>
-  <text class="note" x="114" y="456">예: M&amp;A 제안서 배포·매칭 같은</text>
-  <text class="note" x="114" y="480">업무 전용 탭도 함께 둘 수 있다</text>
+  <text class="cardHead" x="114" y="376">탭 5개</text>
+  <text class="body" x="114" y="404">Claude Code · Codex · Antigravity · Grok</text>
+  <text class="body" x="114" y="430">+ 프로젝트 탭 (탭에 역할 표기는 없음)</text>
+  <text class="note" x="114" y="456">프로젝트 탭 예: M&amp;A 제안서 배포·매칭</text>
+  <text class="note" x="114" y="480">같은 업무 전용 탭도 함께 둘 수 있다</text>
   <text class="body" x="114" y="508">대화 보기: 요약 / 상세 / 전체</text>
   <text class="body" x="114" y="534">PC 여러 대면 탭으로 즉시 전환</text>
 
@@ -89,7 +89,7 @@
 
   <rect class="cardGreen" x="630" y="388" width="440" height="148" rx="8"/>
   <text class="cardHead" x="654" y="420">server.js (7890) — 콘솔 서버</text>
-  <text class="body" x="654" y="448">화면(4탭)과 API를 한 파일에서 제공</text>
+  <text class="body" x="654" y="448">화면(5탭)과 API를 한 파일에서 제공</text>
   <text class="body" x="654" y="472">인증(쿠키·PIN)·업로드 처리</text>
   <text class="note" x="654" y="496">폰은 1.2~1.5초 폴링, WebSocket 없음</text>
   <text class="note" x="654" y="518">폴더 밖 이동·위험 명령 차단</text>
@@ -106,7 +106,7 @@
   <rect class="card" x="630" y="834" width="440" height="134" rx="8"/>
   <text class="cardHead" x="654" y="866">서브 워커 브릿지</text>
   <text class="tag" x="962" y="866">③</text>
-  <text class="body" x="654" y="894">codex_bridge.js · antigravity_bridge.js</text>
+  <text class="body" x="654" y="894">codex_ · antigravity_ · grok_bridge.js</text>
   <text class="body" x="654" y="918">— 데몬 호출, 화면 없음</text>
   <text class="note" x="654" y="944">delegate.js — 메인→서브 위임 파이프</text>
 
@@ -133,13 +133,13 @@
   <text class="body" x="1344" y="584">각 PC가 실제 응답할 때만 초록불</text>
 
   <rect class="cardDark" x="1320" y="622" width="410" height="216" rx="8"/>
-  <text class="cardHead" x="1344" y="654" style="fill:#fafaf7">워커 3 (전부 PC 안에서 실행)</text>
-  <text class="bodyLight" x="1344" y="684">Claude Code — Opus 5 — 메인</text>
-  <text class="bodyLight" x="1344" y="710">Codex — GPT-5.6 — 서브1 · 데몬</text>
-  <text class="bodyLight" x="1344" y="736">Antigravity — Gemini 3.8 Flash — 서브2</text>
-  <text class="bodyLight" x="1344" y="760">(데몬, --conversation으로 맥락 유지)</text>
+  <text class="cardHead" x="1344" y="654" style="fill:#fafaf7">워커 4 (전부 PC 안에서 실행)</text>
+  <text class="bodyLight" x="1344" y="684">Claude Code — Opus 5 — PC 창 대화형(메인)</text>
+  <text class="bodyLight" x="1344" y="710">Codex — GPT-5.6 — 데몬</text>
+  <text class="bodyLight" x="1344" y="736">Antigravity — Gemini 3.8 Flash — 데몬</text>
+  <text class="bodyLight" x="1344" y="760">Grok — grok-4.6 — 데몬 (서브 셋)</text>
   <text class="bodyLight" x="1344" y="792">같은 작업 폴더를 읽고·쓰고 실행</text>
-  <text class="bodyLight" x="1344" y="816">— 셋의 능력은 대등하다</text>
+  <text class="bodyLight" x="1344" y="816">— 넷의 능력은 대등하다</text>
 
   <text class="note" x="1320" y="866">메인은 PC 창의 그 프로세스 그대로다 —</text>
   <text class="note" x="1320" y="888">별도로 또 띄우지 않는다.</text>
@@ -183,7 +183,7 @@
   <path class="flowGold" d="M 850 784 L 850 834"/>
   <text class="edgeLabel" x="862" y="812">위임 파이프</text>
 
-  <!-- 10. 서브 워커 브릿지 → 워커 3 (데몬 실행) -->
+  <!-- 10. 서브 워커 브릿지 → 워커 4 (데몬 실행) -->
   <path class="flow" d="M 1070 900 L 1150 900 L 1150 760 L 1320 760"/>
   <text class="edgeLabel" x="1160" y="754" text-anchor="middle">데몬 실행</text>
 
@@ -196,5 +196,5 @@
   <text class="secBody" x="86" y="1096">프로젝트 폴더 밖 이동·위험 명령(format·shutdown 등) 차단</text>
   <text class="secBody" x="900" y="1096">예외: /api/devices만 무인증 — 기기명·프로젝트명·시각만 노출</text>
 
-  <text class="note" x="60" y="1166">2026-09-17 현행화 · 메인 워커 Antigravity → Claude Code · 최종 방식 = PC 창 + 콘솔 주입</text>
+  <text class="note" x="60" y="1166">2026-09-17 현행화 · 메인 워커 Antigravity → Claude Code · 최종 방식 = PC 창 + 콘솔 주입 · Grok 추가</text>
 </svg>

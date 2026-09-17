@@ -194,7 +194,8 @@
   <div class="tbl" style="margin-top:28px"><table>
     <thead><tr><th>구성 요소</th><th>역할</th><th>어디서</th></tr></thead>
     <tbody>
-      <tr><td>1클릭 실행기 <code>.bat</code></td><td>더블 클릭 한 번으로 전체 기동. Node.js만 있으면 어느 PC든.</td><td>작업 PC</td></tr>
+      <tr><td>1클릭 실행기 <code>.bat</code></td><td>더블 클릭 한 번으로 전체 기동. Node.js만 있으면 어느 PC든. PC별 전용 실행기는 이전 실행이 남긴 좀비 프로세스·포트 점유를 먼저 정리하고, 같은 Wi-Fi 안에서는 터널 없이 <code>로컬IP:7890</code> 직통 주소도 함께 안내.</td><td>작업 PC</td></tr>
+      <tr><td>무인 승인 등록기 <code>.bat</code></td><td>Antigravity CLI가 확인 팝업(Y/N)에서 멈추지 않도록 자동 승인 모드를 PC에 한 번 등록. 폰에서 지시했을 때 PC 앞에 아무도 없어도 작업이 진행되게 하는 장치.</td><td>작업 PC</td></tr>
       <tr><td><code>tunnel.js</code></td><td>내장 cloudflared로 공개 https 주소 발급, 기기 장부에 PC 이름·프로젝트·주소 등록, 60초 하트비트.</td><td>작업 PC</td></tr>
       <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(4탭)과 API를 한 파일로. PIN·토큰 검사, 폰은 1.2~1.5초 폴링. WebSocket 없음.</td><td>작업 PC</td></tr>
       <tr><td>워커 브릿지 3개</td><td><code>live_sync_engine</code>은 Antigravity 대화 로그를 읽기만 해서 비추고, <code>codex_bridge</code>·<code>claude_bridge</code>는 CLI를 실행해 결과를 저장.</td><td>작업 PC</td></tr>

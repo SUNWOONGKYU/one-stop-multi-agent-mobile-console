@@ -1,0 +1,111 @@
+<meta charset="utf-8">
+<title>원스톱 멀티 에이전트 모바일 콘솔 — 한 장 요약</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#fff; --ink:#0f172a; --dim:#64748b; --line:#dbe0ea;
+    --main:#f59e0b; --sub1:#3b82f6; --sub2:#10b981; --acc:#6366f1;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0a0d16; --card:#151b2b; --ink:#e9edf7; --dim:#94a3b8; --line:#28334e; }
+  }
+  :root[data-theme="dark"]{ --bg:#0a0d16; --card:#151b2b; --ink:#e9edf7; --dim:#94a3b8; --line:#28334e; }
+  :root[data-theme="light"]{ --bg:#f4f6fb; --card:#fff; --ink:#0f172a; --dim:#64748b; --line:#dbe0ea; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);padding:26px 14px 50px;
+       font-family:'Pretendard','Malgun Gothic',system-ui,-apple-system,sans-serif}
+  .wrap{max-width:880px;margin:0 auto}
+  h1{font-size:23px;font-weight:800;text-align:center;margin:0 0 4px}
+  .sub{text-align:center;color:var(--dim);font-size:13.5px;margin-bottom:22px}
+
+  .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+  .box{background:var(--card);border:2px solid var(--line);border-radius:14px;
+       padding:13px 15px;flex:1 1 230px;min-width:215px}
+  .box .lbl{font-size:11px;font-weight:800;letter-spacing:.4px;margin-bottom:5px;
+            display:inline-block;padding:2px 9px;border-radius:999px;color:#fff}
+  .box .ttl{font-size:15.5px;font-weight:800;margin-bottom:3px}
+  .box .dsc{font-size:12px;color:var(--dim);line-height:1.5}
+  .b-main{border-color:var(--main)} .b-s1{border-color:var(--sub1)} .b-s2{border-color:var(--sub2)}
+  .b-acc{border-color:var(--acc)}
+  .l-main{background:var(--main)} .l-s1{background:var(--sub1)}
+  .l-s2{background:var(--sub2)} .l-acc{background:var(--acc)}
+
+  .arrow{text-align:center;font-size:17px;color:var(--dim);margin:4px 0 10px;font-weight:800}
+  .hub{background:var(--card);border:2px solid var(--acc);border-radius:14px;
+       padding:14px 16px;text-align:center;margin-bottom:10px}
+  .hub .ttl{font-size:16px;font-weight:800}
+  .hub .dsc{font-size:12.5px;color:var(--dim);margin-top:3px}
+
+  .rule{background:rgba(245,158,11,.12);border-left:4px solid var(--main);
+        border-radius:0 10px 10px 0;padding:11px 14px;font-size:13px;margin-top:16px}
+  .foot{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:999px;
+        padding:6px 13px;font-size:12px;color:var(--dim)}
+  .stamp{text-align:center;color:var(--dim);font-size:11.5px;margin-top:22px}
+  code{font-family:Consolas,monospace;font-size:11.5px}
+  b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+  <h1>원스톱 멀티 에이전트 모바일 콘솔</h1>
+  <div class="sub">PC의 Claude Code 창 하나를 폰에서 그대로 보고 지시한다</div>
+
+  <!-- 접점 2개 -->
+  <div class="row">
+    <div class="box b-acc"><span class="lbl l-acc">접점 ①</span>
+      <div class="ttl">💻 PC 터미널 창</div>
+      <div class="dsc">평소 쓰던 <b>진짜 Claude Code 창</b><br>여기서 직접 작업</div></div>
+    <div class="box b-acc"><span class="lbl l-acc">접점 ②</span>
+      <div class="ttl">📱 폰 채팅창</div>
+      <div class="dsc">그 창의 대화가 <b>말풍선</b>으로 보이고<br>여기 쓰면 그 창에 타이핑됨<br><span style="color:var(--acc);font-weight:700">집 밖 어디서든 (LTE)</span></div></div>
+  </div>
+
+  <div class="arrow">▼ &nbsp; <span style="color:var(--acc)">① 원격 터널링</span>으로 길을 열고 &nbsp; <span style="color:var(--main)">② 미러링</span>으로 잇는다 &nbsp; ▼</div>
+
+  <div class="hub">
+    <div class="ttl">🌐 콘솔 서버 <span style="color:var(--dim);font-weight:600">(포트 7890 + 보안 터널)</span></div>
+    <div class="dsc">
+      <b>① 원격 터널링</b> Cloudflare Tunnel — 포트 개방·고정 IP·공유기 설정 <b>전부 불필요</b><br>
+      <b>② 미러링 · 읽기</b> <code>&lt;세션&gt;.jsonl</code> → 폰 말풍선<br>
+      <b>② 미러링 · 쓰기</b> <code>console_inject.ps1</code> — AttachConsole + WriteConsoleInput (포커스 안 뺏음)
+    </div>
+  </div>
+
+  <div class="arrow">▼</div>
+
+  <!-- 워커 3대 -->
+  <div class="row">
+    <div class="box b-main"><span class="lbl l-main">메인 워커</span>
+      <div class="ttl">🤖 Claude Code</div>
+      <div class="dsc"><b>PC 창에서 대화형</b><br>브라우저 터미널·별도 세션 없음<br>PC에 창은 <b>한 개만</b></div></div>
+    <div class="box b-s1"><span class="lbl l-s1">서브 워커 1</span>
+      <div class="ttl">⚡ Codex</div>
+      <div class="dsc"><b>GPT-5.6-terra · 데몬</b><br>시킬 때만 일어남 · 화면 없음</div></div>
+    <div class="box b-s2"><span class="lbl l-s2">서브 워커 2</span>
+      <div class="ttl">🪐 Antigravity</div>
+      <div class="dsc"><b>Gemini 3.8 Flash · 데몬</b><br>시킬 때만 일어남 · 화면 없음</div></div>
+  </div>
+
+  <div class="arrow">▼ &nbsp; 메인이 서브에게 위임 &nbsp; ▼</div>
+  <div class="hub" style="border-color:var(--line)">
+    <div class="dsc" style="font-family:Consolas,monospace;font-size:12.5px;color:var(--ink)">
+      node delegate.js codex "지시" &nbsp;·&nbsp; node delegate.js agy "지시"
+    </div>
+  </div>
+
+  <div class="rule">
+    <b>규칙 하나</b> — PC에 Claude Code 창은 <b>한 개만</b> 띄운다.
+    여러 개면 가장 최근 창으로 지시가 들어간다.
+  </div>
+
+  <div class="foot">
+    <span class="chip">📎 사진 · 파일 업로드</span>
+    <span class="chip">💬 요약 / 상세 / 전체</span>
+    <span class="chip">🛑 긴급 정지 (Ctrl+C 주입)</span>
+    <span class="chip">🖥️ 여러 PC 탭 전환</span>
+    <span class="chip">🌐 원격 터널링 — 밖에서도 접속</span>
+    <span class="chip">🪞 미러링 — PC 창 그대로</span>
+  </div>
+
+  <div class="stamp">현행화 2026-09-17 · 최종 방식 = PC 창 + 콘솔 주입 (PTY·브라우저 터미널 폐기)</div>
+</div>

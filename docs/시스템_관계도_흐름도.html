@@ -1,0 +1,274 @@
+<meta charset="utf-8">
+<title>원스톱 멀티 에이전트 모바일 콘솔 — 관계도 · 흐름도</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#fff; --ink:#111827; --dim:#6b7280; --line:#d8dce6;
+    --main:#f59e0b; --sub1:#3b82f6; --sub2:#10b981; --pipe:#8b5cf6; --warn:#ef4444;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0b0e17; --card:#141a2a; --ink:#e8ecf5; --dim:#94a3b8; --line:#28334e; }
+  }
+  :root[data-theme="dark"]{ --bg:#0b0e17; --card:#141a2a; --ink:#e8ecf5; --dim:#94a3b8; --line:#28334e; }
+  :root[data-theme="light"]{ --bg:#f6f7fb; --card:#fff; --ink:#111827; --dim:#6b7280; --line:#d8dce6; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:'Pretendard','Malgun Gothic',system-ui,-apple-system,sans-serif;
+       line-height:1.6;padding:28px 16px 60px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;font-weight:800;margin:0 0 4px}
+  .sub{color:var(--dim);font-size:14px;margin-bottom:6px}
+  .stamp{color:var(--dim);font-size:12.5px;margin-bottom:26px}
+  h2{font-size:18px;font-weight:800;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--main)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+  .scroll{overflow-x:auto}
+  pre{margin:0;font-family:'Consolas','D2Coding',monospace;font-size:13px;line-height:1.55;white-space:pre}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:rgba(128,128,128,.10);font-weight:700}
+  .tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:800;color:#fff}
+  .t-main{background:var(--main)} .t-s1{background:var(--sub1)} .t-s2{background:var(--sub2)}
+  .t-pipe{background:var(--pipe)} .t-warn{background:var(--warn)}
+  .note{border-left:4px solid var(--main);background:rgba(245,158,11,.10);
+        padding:11px 14px;border-radius:0 10px 10px 0;font-size:13.5px;margin-top:12px}
+  .danger{border-left-color:var(--warn);background:rgba(239,68,68,.10)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--dim);margin-top:10px}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  code{font-family:Consolas,monospace;font-size:12.5px}
+</style>
+
+<div class="wrap">
+
+<h1>원스톱 멀티 에이전트 모바일 콘솔</h1>
+<div class="sub">시스템 관계도 · 데이터 흐름도</div>
+<div class="stamp">현행화 2026-09-17 · 최종 방식 = <b>PC 창 + 콘솔 주입</b> (PTY·브라우저 터미널 폐기)</div>
+
+<h2>1. 전체 관계도</h2>
+<div class="card scroll">
+<pre>
+   ┌──────────────────────┐              ┌──────────────────────┐
+   │  ① PC 터미널 창       │              │  ② 폰 (허브 접속)     │
+   │  진짜 Claude Code 창  │              │  말풍선 보기 + 지시    │
+   │  평소 쓰던 그 창       │              │  터미널 화면 없음      │
+   └──────────┬───────────┘              └──────────┬───────────┘
+              │                                     │
+              │ transcript(.jsonl) 기록              │ Cloudflare 터널
+              │                                     ▼
+              │                    ┌────────────────────────────┐
+              │  ◀── 읽기 ──────── │  콘솔 서버 server.js (7890) │
+              │                    │  · 인증(PIN → 쿠키 m_sid)   │
+              │  ──── 쓰기 ──────▶ │  · 업로드 / 파일 / 시스템    │
+              │                    └──────────┬─────────────────┘
+              │                               │
+   console_inject.ps1                         │
+   AttachConsole + WriteConsoleInput          │
+   (포커스 안 뺏음, 한글 OK)                    │
+                                              ▼
+                              ┌───────────────────────────────┐
+                              │  서브 워커 브릿지 (데몬 호출)   │
+                              │  codex_bridge / antigravity   │
+                              └──┬──────────────────┬─────────┘
+                                 ▼                  ▼
+   🤖 Claude Code            ⚡ Codex           🪐 Antigravity
+   Opus 5 · PC 창 대화형      GPT-5.6-terra      Gemini 3.8 Flash
+   <b>메인 워커</b>                <b>서브 워커 1</b>        <b>서브 워커 2</b>
+</pre>
+<div class="legend">
+  <span><i class="dot" style="background:var(--main)"></i>메인 — PC 창에서 대화형</span>
+  <span><i class="dot" style="background:var(--sub1)"></i>서브1 — 데몬</span>
+  <span><i class="dot" style="background:var(--sub2)"></i>서브2 — 데몬</span>
+</div>
+</div>
+
+<div class="note">
+<b>이 구조의 핵심</b> — Claude 는 PC 창에 <b>한 명</b>뿐입니다.
+폰은 그 창을 <b>읽고(transcript)</b> <b>쓸(콘솔 주입)</b> 뿐, 별도 Claude 를 띄우지 않습니다.
+Antigravity 가 메인이던 시절과 같은 원칙입니다.
+</div>
+
+<h2>2. 이 시스템을 떠받치는 두 기술</h2>
+<div class="card scroll">
+<pre>
+  ┌───────────────────────────────────────────────────────────────┐
+  │  폰 (LTE · 카페 · 이동 중 — 집 밖 어디든)                        │
+  └───────────────────────────┬───────────────────────────────────┘
+                              │
+                    <b>① 원격 터널링</b>  ← "길"을 만든다
+                    Cloudflare Tunnel
+                    · 포트 개방 · 고정 IP · 공유기 설정 <b>전부 불필요</b>
+                    · PC가 밖으로 먼저 연결을 걸어 길을 연다
+                    · 주소는 켤 때마다 바뀌고, 허브 장부가 최신 주소를 안내
+                              │
+                              ▼
+  ┌───────────────────────────────────────────────────────────────┐
+  │  콘솔 서버 (PC · 포트 7890)                                     │
+  └───────────────────────────┬───────────────────────────────────┘
+                              │
+                    <b>② 미러링</b>  ← 그 길 끝에서 "하는 일"
+                    PC 터미널 창 ↔ 폰
+                    · <b>읽기</b>  세션 기록(.jsonl)을 읽어 폰에 말풍선으로 그림
+                    · <b>쓰기</b>  console_inject.ps1 로 그 창 콘솔에 직접 타이핑
+                              │
+                              ▼
+  ┌───────────────────────────────────────────────────────────────┐
+  │  PC 의 진짜 Claude Code 창 (평소 쓰던 그 창)                     │
+  └───────────────────────────────────────────────────────────────┘
+</pre>
+<div class="legend">
+  <span><i class="dot" style="background:var(--pipe)"></i>① 원격 터널링 — 밖에서 PC까지 닿는 길</span>
+  <span><i class="dot" style="background:var(--main)"></i>② 미러링 — PC 창과 폰을 하나로 잇는 것</span>
+</div>
+</div>
+
+<div class="card scroll">
+<table>
+<tr><th style="width:150px">구분</th><th><span class="tag t-pipe">①</span> 원격 터널링</th><th><span class="tag t-main">②</span> 미러링</th></tr>
+<tr><td>무엇을 잇나</td><td>폰 ↔ PC <b>네트워크</b></td><td>PC 창 ↔ 폰 <b>화면·입력</b></td></tr>
+<tr><td>쓰는 기술</td><td>Cloudflare Tunnel (cloudflared)</td><td>transcript 읽기 + AttachConsole·WriteConsoleInput</td></tr>
+<tr><td>없으면</td><td>같은 Wi-Fi 안에서만 쓸 수 있다</td><td>폰에서 PC 창을 보지도 쓰지도 못한다</td></tr>
+<tr><td>설정 부담</td><td><b>없음</b> — 포트 개방·고정 IP 불필요</td><td><b>없음</b> — PC 창만 띄워두면 됨</td></tr>
+<tr><td>관련 파일</td><td><code>tunnel.js</code> · <code>hub_deploy.js</code> · <code>cloudflared.exe</code></td><td><code>main_worker_bridge.js</code> · <code>console_inject.ps1</code> · <code>proc_cwd.ps1</code></td></tr>
+</table>
+<div class="note">
+<b>둘 중 하나만으론 안 된다.</b> 터널만 있으면 "연결은 되는데 볼 게 없고",
+미러링만 있으면 "볼 수는 있는데 집 안에서만" 된다. 둘이 겹쳐야 <b>밖에서 PC 창을 그대로 쓰는</b> 일이 성립한다.
+</div>
+</div>
+
+<h2>3. 워커 비교</h2>
+<div class="card scroll">
+<table>
+<tr><th style="width:130px">항목</th>
+    <th><span class="tag t-main">메인</span> Claude Code</th>
+    <th><span class="tag t-s1">서브1</span> Codex</th>
+    <th><span class="tag t-s2">서브2</span> Antigravity</th></tr>
+<tr><td>구동</td><td><b>PC 창에서 대화형</b></td><td>데몬 · 떴다 죽음</td><td>데몬 · 떴다 죽음</td></tr>
+<tr><td>화면</td><td><b>PC 터미널 창</b></td><td>없음 (기록만)</td><td>없음 (기록만)</td></tr>
+<tr><td>폰에서 보기</td><td>말풍선 (transcript)</td><td>말풍선 (기록)</td><td>말풍선 (기록)</td></tr>
+<tr><td>폰에서 지시</td><td><b>콘솔 주입</b> → PC 창에 타이핑</td><td>데몬 실행</td><td>데몬 실행</td></tr>
+<tr><td>맥락 유지</td><td>세션 그대로</td><td>세션 유지</td><td><code>--conversation</code> 고정</td></tr>
+<tr><td>중단</td><td>Ctrl+C 주입</td><td>프로세스 종료</td><td>프로세스 종료</td></tr>
+</table>
+</div>
+
+<h2>4. 흐름도 A — 폰에서 지시를 보낼 때</h2>
+<div class="card scroll">
+<pre>
+ 폰 채팅창 입력
+      │
+      ▼
+ POST /api/send-mobile-input ──▶ 인증 확인 (쿠키 m_sid 또는 ?pin=)
+      │                              │ 실패 → 401 차단
+      ▼
+ main_worker_bridge.executeMainPrompt()
+      │
+      ▼
+ PC 창(claude.exe) PID 찾기   <b>← 작업 디렉토리 기준</b>
+   · proc_cwd.ps1 로 각 창의 cwd 를 읽어 <b>이 프로젝트 폴더 창만</b> 후보
+   · 다른 프로젝트 창은 <b>완전히 제외</b> (지시가 새면 안 됨)
+   · 같은 폴더 창이 여럿이면 세션ID 일치 > 가장 최근 창
+   · 창이 없으면 그 폴더에서 새로 띄움 (cmd /k claude --resume)
+      │
+      ▼
+ console_inject.ps1
+   FreeConsole → AttachConsole(PID) → CONIN$ → WriteConsoleInputW
+   글자 KEY_EVENT + Enter   <b>(포커스 안 뺏음)</b>
+      │
+      ▼
+ <b>PC 창에 그대로 타이핑되어 실행</b>
+      │
+      ▼
+ 결과가 transcript 에 기록 → 폰 말풍선에 표시 (요약 / 상세 / 전체)
+</pre>
+</div>
+
+<h2>5. 흐름도 B — 파일·사진을 올릴 때</h2>
+<div class="card scroll">
+<pre>
+ 📎 클립 버튼 (하나뿐)
+      │
+      ▼
+ 폰 <b>기본 선택창</b> — 카메라 · 캠코더 · 파일
+   accept="image/*,video/*,application/*,text/*"
+   <b>※ 중간 팝업 없음</b> (탭만 늘어나서 제거)
+      │
+      ▼
+ POST /api/upload  (본문 상한 25MB)
+      │
+      ▼
+ uploads/ 에 저장 (파일명 안전화 · 경로 이탈 차단)
+      │
+      ▼
+ 해당 탭 워커에게 "이 파일 분석해줘" 자동 전달
+</pre>
+</div>
+
+<h2>6. 흐름도 C — 폰이 PC를 찾아가는 길</h2>
+<div class="card scroll">
+<pre>
+ PC: 콘솔 서버 기동
+      │
+      ├─▶ Cloudflare 터널 주소 발급 (재시작마다 바뀜)
+      │
+      ├─▶ GitHub Gist 장부에 등록  ← 읽을 때는 API(무캐시)
+      │     · raw CDN 은 5분 캐시라 옛 주소를 덮어쓰는 사고가 남
+      │     · 60초마다 하트비트 재등록
+      │
+      └─▶ 허브(deployconsolehub)에 devices.json 배포
+            │
+            ▼
+      폰: 허브 고정 주소 접속
+            │
+            ├─▶ 장부에서 PC 목록·주소 획득
+            ├─▶ 각 PC의 /api/devices 를 4초마다 직접 확인
+            │     실제 응답할 때만 <b>초록 불</b>
+            └─▶ 탭 선택 → 그 PC 콘솔로 연결
+</pre>
+</div>
+
+<h2>7. 메인 → 서브 위임 흐름</h2>
+<div class="card scroll">
+<pre>
+ 메인 워커 (PC 창의 Claude Code)
+      │
+      │  node delegate.js codex "지시"
+      │  node delegate.js agy   "지시"
+      ▼
+ delegate.js
+      ├──▶ codex_bridge        → codex exec  → 결과 반환
+      └──▶ antigravity_bridge  → agy -p      → 결과 반환
+      │
+      ▼
+ 결과가 해당 탭 대화에 쌓이고, 메인 워커도 그 답을 받아본다
+</pre>
+</div>
+
+<h2>8. 보안 관문</h2>
+<div class="card scroll">
+<table>
+<tr><th style="width:190px">경로</th><th>인증</th><th>비고</th></tr>
+<tr><td><code>/api/devices</code></td><td><span class="tag t-pipe">무인증</span></td><td>허브 생존확인 전용. 기기명·프로젝트명·시각만 노출</td></tr>
+<tr><td>그 외 전체 API</td><td>쿠키 <code>m_sid</code> 또는 <code>?pin=</code></td><td>자격증명 없으면 <b>401 차단</b></td></tr>
+<tr><td><code>/api/login</code></td><td>PIN</td><td>5회 실패 시 해당 IP 5분 차단</td></tr>
+<tr><td>GitHub 토큰</td><td>—</td><td>소스에 두지 않음. <code>GH_TOKEN</code> 또는 <code>gh auth token</code></td></tr>
+</table>
+<div class="note danger">
+<b>과거에 있던 구멍</b> — 인증 함수가 “자격증명이 아예 없으면 통과”였습니다.
+공개 터널 주소만 알면 PIN 없이 파일 열람과 PowerShell 실행까지 가능했습니다. 차단으로 바로잡았습니다.
+</div>
+</div>
+
+<h2>9. 반드시 지킬 것</h2>
+<div class="card">
+<div class="note danger">
+<b>PC에 Claude Code 창은 한 개만.</b> 여러 개면 가장 최근 창으로 지시가 들어갑니다.<br>
+브라우저 터미널·별도 세션·node-pty 는 <b>쓰지 않습니다</b> (2026-09-17 폐기).
+</div>
+<div class="note">
+<b>시행착오 기록</b> — 메인 워커를 ① 헤드리스 별도 세션 ② 브라우저 공유 터미널(PTY) 로 만들었다가 둘 다 폐기했습니다.
+둘 다 “폰 = PC 창 그대로” 라는 원칙을 깼기 때문입니다. 정답은 <b>PC 창의 콘솔 입력 버퍼에 직접 타이핑</b>하는 것이었습니다.
+</div>
+</div>
+
+</div>

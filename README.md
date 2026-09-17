@@ -1,76 +1,151 @@
 # One-Stop Multi-Agent Mobile Console (원스톱 멀티 에이전트 모바일 콘솔)
 
-> 어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종(Antigravity · Codex CLI · Claude Code CLI)을 연결하는 무설치 포터블 스타터 킷.
+> 어떤 PC에서든 더블 클릭 한 번으로 스마트폰과 AI 워커 3종(Claude Code · Codex CLI · Antigravity)을 연결하는 무설치 포터블 스타터 킷.
 > 폰은 북마크 하나, PC는 켜 두기만. 지시는 폰에서, 실행과 파일은 전부 PC 안에서.
 
 **소개 페이지:** https://one-stop-multi-agent-mobile-console.vercel.app/
+
+> **2026-09-17 개편** — 메인 워커가 Antigravity → **Claude Code** 로 바뀌었고,
+> 메인 워커는 **PC에서 평소 쓰던 진짜 터미널 창을 그대로** 씁니다. 폰은 그 창을 거울처럼 봅니다.
 
 ## 한눈에
 
 | | |
 |---|---|
 | 필요한 것 | Node.js가 깔린 Windows PC 1대, 스마트폰 브라우저 |
-| 설치 | 없음 — 폴더 하나(cloudflared · ttyd 실행 파일 내장) |
+| 설치 | 없음 — 폴더 하나 (cloudflared 실행 파일 내장) |
 | 네트워크 설정 | 없음 — 포트 개방·공유기·VPN 불필요 (Cloudflare 터널) |
-| 폰 접속 | 통합 허브 주소 1개 북마크 → 켜진 PC마다 탭(상태등) → 탭 터치로 PC 간 즉시 전환. PC별 전용 주소도 있음 |
-| 워커 | 🪐 Antigravity(메인, 대화창 실시간 미러) · ⚡ Codex CLI · 🤖 Claude Code CLI (서브, 무인 데몬) |
-| 콘솔 탭 | Antigravity / Codex / Claude Code / 프로젝트 탭 + 업로드 · 긴급 정지 · 단순화/상세 모드 |
+| 폰 접속 | 통합 허브 주소 1개 북마크 → 켜진 PC마다 탭(상태등) → 탭 터치로 PC 간 즉시 전환 |
+| 메인 워커 | 🤖 **Claude Code** — PC의 진짜 터미널 창에서 대화형. 폰이 그 창을 미러링 |
+| 서브 워커 | ⚡ **Codex CLI** · 🪐 **Antigravity** — 백그라운드 데몬 (화면 없음) |
+| 콘솔 탭 | Claude Code / Codex / Antigravity / 프로젝트 + 업로드 · 긴급 정지 · 요약·상세·전체 보기 |
 | 데이터 | 클라우드에는 "어느 PC가 켜져 있고 주소가 무엇인가"만. 대화·파일·결과물은 PC 밖으로 안 나감 |
+
+## 핵심 구조
+
+```
+   PC 터미널 창                            폰
+   진짜 Claude Code 창                     말풍선으로 보고, 채팅창으로 지시
+   (평소 쓰던 그 창)                        (터미널 화면 없음)
+        │                                      │
+        │  ◀── 읽기: transcript(.jsonl) ────── │
+        │  ──── 쓰기: 콘솔 입력 주입 ─────────▶ │
+        │
+   Claude 는 PC 창에 한 명뿐. 별도 세션도, 브라우저 터미널도 없다.
+```
+
+**읽기**는 Claude Code 가 남기는 세션 기록(`.jsonl`)을 그대로 읽어 폰에 말풍선으로 그린다.
+**쓰기**는 `AttachConsole` + `WriteConsoleInput` 으로 그 창의 콘솔 입력 버퍼에 직접 타이핑한다 — **포커스를 뺏지 않는다.**
+
+## 떠받치는 두 기술
+
+| | ① 원격 터널링 | ② 미러링 |
+|---|---|---|
+| 무엇을 잇나 | 폰 ↔ PC **네트워크** | PC 창 ↔ 폰 **화면·입력** |
+| 쓰는 기술 | Cloudflare Tunnel (`cloudflared`) | 세션 기록 읽기 + `AttachConsole`·`WriteConsoleInput` |
+| 없으면 | 같은 Wi-Fi 안에서만 쓸 수 있다 | 폰에서 PC 창을 보지도 쓰지도 못한다 |
+| 설정 부담 | **없음** — 포트 개방·고정 IP 불필요 | **없음** — PC 창만 띄워두면 됨 |
+| 관련 파일 | `tunnel.js` · `hub_deploy.js` · `cloudflared.exe` | `main_worker_bridge.js` · `console_inject.ps1` · `proc_cwd.ps1` |
+
+```
+폰 (LTE · 집 밖 어디든)
+   │
+   │  ① 원격 터널링 — "길"을 만든다
+   ▼
+콘솔 서버 (PC · 7890)
+   │
+   │  ② 미러링 — 그 길 끝에서 "하는 일"
+   ▼
+PC 의 진짜 Claude Code 창
+```
+
+**둘 중 하나만으론 안 된다.** 터널만 있으면 연결은 되는데 볼 게 없고,
+미러링만 있으면 볼 수는 있는데 집 안에서만 된다. 둘이 겹쳐야 **밖에서 PC 창을 그대로 쓰는** 일이 성립한다.
 
 ## 도해
 
-- [관계도](docs/관계도.svg) — 스마트폰 · 작업 PC · 클라우드/AI 워커 세 열의 구성 요소와 연결
-- [작업 흐름도](docs/흐름도.svg) — 기동 4단계(PC 1회) → 접속 3단계(폰 1회) → 지시·실행·회신 5단계(반복)
+- **[시스템 관계도 · 흐름도](docs/시스템_관계도_흐름도.html)** — 전체 관계도, 두 기술, 워커 비교, 흐름도 3종, 보안 관문 (2026-09-17 최신)
+- **[압축 다이어그램 (한 장)](docs/압축_다이어그램_한장.html)** — 한 장 요약 (2026-09-17 최신)
+- [관계도 SVG](docs/관계도.svg) · [흐름도 SVG](docs/흐름도.svg) — 초판 도해 (Antigravity 메인 시절)
 
-## 작동 방식 (12단계 요약)
+## 작동 방식
 
 **A. 기동 — PC에서 한 번**
-1. `1클릭_모바일콘솔_실행.bat` 더블 클릭 → `watch_mobile_tasks.js` 백그라운드, `tunnel.js` 실행
-2. `server.js`가 7890 포트에서 콘솔 화면 + API 기동
-3. 내장 cloudflared가 공개 https 주소 발급
-4. 기기 장부에 PC 이름·프로젝트·주소 등록, 60초마다 생존 신고
+1. 프로젝트 폴더에서 Claude Code 창 하나 띄우기 (`claude --dangerously-skip-permissions`)
+2. 콘솔 가동 배치 더블 클릭 → `server.js` 가 7890 포트에서 콘솔 화면 + API 기동
+3. 내장 cloudflared 가 공개 https 주소 발급
+4. 기기 장부에 PC 이름·프로젝트·주소 등록, 60초마다 생존 신고 + 허브에 직접 배포
 
 **B. 접속 — 폰에서 한 번**
 5. 고정 허브 주소(북마크) 열기
-6. 통합 허브가 장부를 읽어 켜진 PC마다 탭을 띄움 — 탭 터치로 PC 선택·전환 (PC별 전용 주소로 바로 열 수도 있음)
-7. 터널 → `server.js` → 4탭 콘솔 화면. PIN 1회 → 세션 토큰, 이후 자동
+6. 허브가 장부를 읽어 켜진 PC마다 탭을 띄움 — 초록불은 그 PC가 **실제로 응답 중**이라는 뜻
+7. 터널 → `server.js` → 4탭 콘솔. PIN 1회 → 세션 쿠키, 이후 자동
 
 **C. 지시 · 실행 · 회신 — 반복**
-8. 탭을 고르고 지시(텍스트, 사진·파일 업로드, 요약 칩)
-9. `server.js`가 길을 나눔 — Antigravity는 파일 큐(`tasks_from_mobile.json`)에 적고 watcher가 깨움 / Codex·Claude는 브릿지가 CLI를 stdin으로 바로 실행
+8. 탭을 고르고 지시 (텍스트, 사진·파일 업로드, 추천 칩)
+9. 메인은 `console_inject.ps1` 로 **PC 창에 타이핑** / 서브는 브릿지가 CLI 를 바로 실행
 10. 워커가 PC 안에서 작업
-11. 결과 저장(`codex_messages.json` · `claude_messages.json`) / Antigravity 대화 로그는 그대로 읽어 미러
-12. 폰이 1.2~1.5초 폴링으로 결과 표시 → 8로 반복
+11. 메인 결과는 세션 기록에, 서브 결과는 각자 메시지 파일에 쌓임
+12. 폰이 1.2~1.5초 폴링으로 표시 → 8로 반복
+
+## 워커 3종
+
+| 구분 | 워커 | 모델 | 구동 |
+|---|---|---|---|
+| **메인** | 🤖 Claude Code | Opus 5 | **PC 터미널 창에서 대화형** · 폰이 미러링 |
+| 서브 1 | ⚡ Codex | GPT-5.6-terra | 백그라운드 데몬 (`codex exec`) |
+| 서브 2 | 🪐 Antigravity | Gemini 3.8 Flash | 백그라운드 데몬 (`agy -p`, 대화 맥락 유지) |
+
+메인은 서브에게 일을 넘길 수 있다.
+
+```bash
+node delegate.js codex "이 스크립트 버그 고쳐줘"
+node delegate.js agy   "이 문서 3줄로 요약해줘"
+```
 
 ## 스타터 킷 구성
 
 ```
 📁 원스톱_멀티에이전트_모바일콘솔_스타터킷/
-├── 1클릭_모바일콘솔_실행.bat   # 실행기 — 더블 클릭 한 번 (올인원 start_all.js 포함)
-├── PC2_전용_원클릭_실행기.bat  # PC별 실행기 — 좀비 프로세스·포트 정리 후 기동, 같은 Wi-Fi 직통 주소 안내
-├── 영구_자동승인_등록기.bat    # Antigravity CLI 무인 자동 승인 등록 (폰 지시 시 PC 앞 확인 팝업 제거)
-├── server.js                  # 모바일 콘솔 풀스택 서버 (4탭 UI + API, 7890)
-├── tunnel.js                  # 터널 개통 + 기기 장부 등록 + 60초 하트비트
-├── live_sync_engine.js        # Antigravity 대화 로그 → 폰 미러 (읽기 전용)
-├── codex_bridge.js            # Codex CLI 실행·결과 저장
-├── claude_bridge.js           # Claude Code CLI 실행·결과 저장
-├── watch_mobile_tasks.js      # 폰 지시 감지 → Antigravity 깨우기
-├── sync_urls.js               # 접속 링크 파일 자동 생성
-├── delegate.js · send_reply_to_mobile.js · cli_sync.js
-├── cloudflared.exe · ttyd.exe # 내장 실행 파일 (무설치)
-└── *.json                     # 파일 큐 (지시 · 응답 · 장부)
+├── 🚀모바일콘솔_가동.bat        # 실행기 — 더블 클릭 한 번
+├── server.js                   # 콘솔 풀스택 서버 (4탭 UI + API, 7890)
+├── tunnel.js / start_all.js    # 터널 개통 + 장부 등록 + 허브 배포 + 60초 하트비트
+│
+├── main_worker_bridge.js       # 메인: 창 찾기·띄우기, 기록 읽기, 지시 주입
+├── console_inject.ps1          # AttachConsole + WriteConsoleInput 로 타이핑
+├── proc_cwd.ps1                # 창별 작업 폴더 판별 — 다른 프로젝트 창 제외
+│
+├── codex_bridge.js             # 서브1 Codex
+├── antigravity_bridge.js       # 서브2 Antigravity
+├── delegate.js                 # 메인 → 서브 위임
+│
+├── gh_token.js                 # 토큰 조회 (소스 하드코딩 금지)
+├── hub_deploy.js               # 허브에 주소 장부 직접 배포
+├── cloudflared.exe             # 내장 실행 파일 (무설치)
+└── *.json                      # 메시지·세션·장부
 ```
 
 ## 설계 원칙
 
-- **PIN 한 번, 이후 토큰** — 토큰 없는 API 요청은 전부 거절
+- **Claude 는 한 명** — PC 창 하나가 유일한 메인 워커. 폰은 그 창을 읽고 쓸 뿐
+- **창 선택은 작업 디렉토리 기준** — 다른 프로젝트 창으로 지시가 새지 않는다
+- **자격증명 없으면 차단** — PIN → 세션 쿠키, 무자격 요청은 401. 5회 실패 시 5분 차단
 - **클라우드에는 주소만** — 허브·장부는 켜진 PC와 주소만 안다
-- **WebSocket 없이 폴링 + JSON 파일 큐** — 부품이 적어 끊겨도 스스로 돌아온다
+- **WebSocket 없이 폴링 + JSON 파일** — 부품이 적어 끊겨도 스스로 돌아온다
 - **폴더 하나가 전부** — 복사해서 어느 PC, 어느 프로젝트에 붙여도 동작
+
+## 만들며 겪은 함정 (같은 실수를 피하시라고)
+
+- **메인 워커를 헤드리스로 돌리면 안 된다** — 폰과 PC 가 서로 다른 Claude 가 되어 대화가 갈라진다
+- **브라우저 안의 터미널도 답이 아니다** — 평소 쓰던 창이 아니면 쓸모가 없다
+- **PowerShell 출력은 한글을 깨뜨린다** — 한글 경로 비교가 실패한다. `OutputEncoding` 을 UTF-8 로 고정할 것
+- **cmd 는 배치 파일을 옛 코드페이지로 읽는다** — 한글 UTF-8 배치는 명령줄이 깨진다. 배치는 ASCII 로
+- **`accept` 에 확장자 목록을 쓰면** 안드로이드가 엉뚱한 선택창을 띄운다. MIME 으로 지정할 것
 
 ## 이 저장소에 있는 것 / 없는 것
 
-이 저장소는 **소개서와 도해**입니다. 스타터 킷의 실행 코드(허브 주소·PIN·장부 식별자 포함)는 운영자 개인 환경에 묶여 있어 공개 저장소에 넣지 않았습니다.
+이 저장소는 **소개서와 도해**입니다. 스타터 킷의 실행 코드(허브 주소·PIN·장부 식별자 포함)는
+운영자 개인 환경에 묶여 있어 공개 저장소에 넣지 않았습니다.
 
 ## 만든 사람
 

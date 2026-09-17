@@ -134,9 +134,9 @@
     </div>
     <p class="cta-note"><b>필요한 것</b> — Node.js가 깔린 Windows PC 1대, 스마트폰 브라우저. 포트 개방·공유기 설정·앱 설치 전부 없음.</p>
     <div class="vendbar">
-      <span class="vb"><i style="background:#60a5fa"></i>Antigravity <small>Google · 메인</small></span>
-      <span class="vb"><i style="background:#f59e0b"></i>Codex CLI <small>OpenAI · 서브</small></span>
-      <span class="vb"><i style="background:#d97706"></i>Claude Code <small>Anthropic · 서브</small></span>
+      <span class="vb"><i style="background:#60a5fa"></i>Antigravity <small>Google · 서브 2</small></span>
+      <span class="vb"><i style="background:#f59e0b"></i>Codex CLI <small>OpenAI · 서브 1</small></span>
+      <span class="vb"><i style="background:#d97706"></i>Claude Code <small>Anthropic · 메인</small></span>
     </div>
   </div>
   <div>
@@ -160,7 +160,7 @@
 <section><div class="wrap">
   <p class="kicker">Problem</p>
   <h2>AI 워커에게 일을 시키려면<br>결국 컴퓨터 앞에 앉아야 합니다</h2>
-  <p class="sub">Antigravity, Codex, Claude Code — 셋 다 PC에서 돕니다. 자리를 뜨는 순간 지시도, 확인도 끊깁니다. 원격 데스크톱은 무겁고, 터미널 공유는 폰에서 쓸 물건이 아닙니다.</p>
+  <p class="sub">Claude Code, Codex, Antigravity — 셋 다 PC에서 돕니다. 자리를 뜨는 순간 지시도, 확인도 끊깁니다. 원격 데스크톱은 무겁고, 터미널 공유는 폰에서 쓸 물건이 아닙니다.</p>
   <div class="grid g3">
     <div class="card"><div class="ic">🚶</div><h3>자리를 뜨면 끊긴다</h3><p>외출·이동·회의 중에는 돌아가는 작업을 볼 수도, 다음 지시를 줄 수도 없다.</p></div>
     <div class="card"><div class="ic">🧩</div><h3>워커마다 창이 다르다</h3><p>IDE 대화창, 터미널 두 개. 폰에서 셋을 한 화면에 모을 방법이 없었다.</p></div>
@@ -175,7 +175,7 @@
   <div class="steps">
     <div class="step"><h3>PC에서 더블 클릭</h3><p>실행기가 콘솔 서버를 띄우고, 내장 cloudflared로 공개 https 주소를 받아 기기 장부에 등록합니다. 60초마다 생존 신고.</p></div>
     <div class="step"><h3>폰에서 북마크 열기</h3><p>통합 허브가 켜진 PC마다 탭을 띄웁니다. [PC 1번] [PC 2번] 탭을 터치 한 번으로 오가며 여러 컴퓨터를 한 화면에서 지휘합니다. PC별 전용 주소도 있습니다.</p></div>
-    <div class="step"><h3>지시하고 결과 받기</h3><p>탭을 고르고 지시. Antigravity는 PC 대화창이 그대로 비치고, Codex·Claude는 CLI가 돌아 결과를 돌려줍니다. 긴급 정지는 언제나.</p></div>
+    <div class="step"><h3>지시하고 결과 받기</h3><p>탭을 고르고 지시. Claude Code는 PC 터미널 창이 그대로 비치고 폰에서 쓴 글이 그 창에 타이핑됩니다. Codex·Antigravity는 백그라운드 데몬이 돌아 결과를 돌려줍니다. 긴급 정지는 언제나.</p></div>
   </div>
   <figure class="fig" style="margin:34px 0 0">
     <img src="docs/흐름도.svg" alt="작업 흐름도 — 기동 4단계, 접속 3단계, 지시·실행·회신 5단계를 스마트폰·클라우드·작업 PC·AI 워커 네 레인으로 표시" width="1820" height="1320" loading="lazy">
@@ -198,8 +198,8 @@
       <tr><td>무인 승인 등록기 <code>.bat</code></td><td>Antigravity CLI가 확인 팝업(Y/N)에서 멈추지 않도록 자동 승인 모드를 PC에 한 번 등록. 폰에서 지시했을 때 PC 앞에 아무도 없어도 작업이 진행되게 하는 장치.</td><td>작업 PC</td></tr>
       <tr><td><code>tunnel.js</code></td><td>내장 cloudflared로 공개 https 주소 발급, 기기 장부에 PC 이름·프로젝트·주소 등록, 60초 하트비트.</td><td>작업 PC</td></tr>
       <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(4탭)과 API를 한 파일로. PIN·토큰 검사, 폰은 1.2~1.5초 폴링. WebSocket 없음.</td><td>작업 PC</td></tr>
-      <tr><td>워커 브릿지 3개</td><td><code>live_sync_engine</code>은 Antigravity 대화 로그를 읽기만 해서 비추고, <code>codex_bridge</code>·<code>claude_bridge</code>는 CLI를 실행해 결과를 저장.</td><td>작업 PC</td></tr>
-      <tr><td>파일 큐 (JSON)</td><td>폰의 지시, 워커 응답, 업로드 파일이 오가는 우체통. <code>watch_mobile_tasks</code>가 지시를 감지해 Antigravity를 깨운다.</td><td>작업 PC</td></tr>
+      <tr><td>워커 브릿지 3개</td><td><code>main_worker_bridge</code>는 PC 창의 세션 기록을 읽어 비추고 지시를 그 창에 주입하고, <code>codex_bridge</code>·<code>antigravity_bridge</code>는 CLI를 실행해 결과를 저장.</td><td>작업 PC</td></tr>
+      <tr><td>파일 큐 (JSON)</td><td>폰의 지시, 워커 응답, 업로드 파일이 오가는 우체통. 메인 지시는 <code>console_inject</code>가 PC 창에 직접 타이핑하고, 서브는 브릿지가 CLI를 실행한다.</td><td>작업 PC</td></tr>
       <tr><td>Cloudflare 터널</td><td>PC 안 7890 포트 ↔ 공개 https. 포트 개방·공유기 설정 없음, SSL 자동.</td><td>클라우드</td></tr>
       <tr><td>통합 허브</td><td>정적 페이지 1장. 장부를 읽어 켜진 PC마다 탭을 띄우고(상태등 🟢), 탭 터치로 PC 간 즉시 전환. PC별 전용 주소도 발급. 폰 북마크는 이 주소 하나.</td><td>클라우드</td></tr>
       <tr><td>기기 장부</td><td>어느 PC가 켜져 있고 주소가 무엇인지. 24시간 소식 없는 PC는 자동 제거.</td><td>클라우드</td></tr>
@@ -222,7 +222,7 @@
   <p class="kicker">Console</p>
   <h2>탭 4개, 그리고 긴급 정지</h2>
   <div class="grid g4">
-    <div class="card"><h3>🪐 Antigravity</h3><p>대화창 미러 + 지시 입력. 3줄 요약·한 줄 결론·계속 진행 칩.</p></div>
+    <div class="card"><h3>🤖 Claude Code</h3><p><b>PC 터미널 창을 그대로 미러링</b>. 폰에서 쓴 글이 그 창에 타이핑된다. 요약·상세·전체 보기.</p></div>
     <div class="card"><h3>⚡ Codex</h3><p>지시 → 실행 → 결과. 상태 라벨(작업 중/대기)과 전체 히스토리.</p></div>
     <div class="card"><h3>🤖 Claude Code</h3><p>Codex와 같은 레이아웃. 사진·파일 업로드 후 분석 지시.</p></div>
     <div class="card"><h3>📑 프로젝트 탭</h3><p>프로젝트 전용 화면(예: M&amp;A 제안서 배포·매칭). 파일 API는 작업 폴더 밖을 차단.</p></div>
@@ -237,7 +237,7 @@
     <div class="card"><div class="ic">🔑</div><h3>PIN 한 번, 이후 토큰</h3><p>첫 접속에 PIN을 넣으면 세션 토큰이 발급되고 모든 API 호출에 자동으로 붙는다. 토큰 없는 요청은 전부 거절.</p></div>
     <div class="card"><div class="ic">☁️</div><h3>클라우드에는 주소만</h3><p>허브와 장부는 "어느 PC가 켜져 있고 주소가 무엇인가"만 안다. 대화·파일·결과물은 PC 밖으로 나가지 않는다.</p></div>
     <div class="card"><div class="ic">🔁</div><h3>WebSocket 없이 폴링</h3><p>1.2~1.5초 폴링과 JSON 파일 큐. 부품이 적어 끊겨도 스스로 돌아온다.</p></div>
-    <div class="card"><div class="ic">📦</div><h3>폴더 하나가 전부, PC는 몇 대든</h3><p>cloudflared·ttyd 실행 파일 내장. 폴더를 복사해 어느 PC에 붙여도 그대로 동작하고, 켜진 PC마다 허브에 탭이 하나씩 생긴다.</p></div>
+    <div class="card"><div class="ic">📦</div><h3>폴더 하나가 전부, PC는 몇 대든</h3><p>cloudflared 실행 파일 내장. 폴더를 복사해 어느 PC에 붙여도 그대로 동작하고, 켜진 PC마다 허브에 탭이 하나씩 생긴다.</p></div>
   </div>
 </div></section>
 

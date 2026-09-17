@@ -195,11 +195,11 @@
   <div class="tbl" style="margin-top:28px"><table>
     <thead><tr><th>구성 요소</th><th>역할</th><th>어디서</th></tr></thead>
     <tbody>
-      <tr><td>실행기 <code>.bat</code></td><td>더블 클릭 한 번으로 콘솔 서버와 터널을 기동. Node.js만 있으면 어느 PC든. 메인 워커 창 단독 실행기, 서브2 단독 실행기도 별도로 있다.</td><td>작업 PC</td></tr>
+      <tr><td>실행기 <code>.bat</code></td><td>더블 클릭 한 번으로 콘솔 서버와 터널을 기동. Node.js만 있으면 어느 PC든. Claude Code 창 단독 실행기, Antigravity 단독 실행기도 별도로 있다.</td><td>작업 PC</td></tr>
       <tr><td><code>server.js</code> (7890)</td><td>모바일 콘솔 화면(5탭)과 API를 한 파일로. PIN·인증 검사, 업로드 처리. 폰은 1.2~1.5초 폴링, WebSocket 없음.</td><td>작업 PC</td></tr>
       <tr><td><code>tunnel.js</code></td><td>내장 cloudflared로 공개 https 주소 발급, 기기 장부 API에 등록, 60초 하트비트, 허브에 devices.json 배포.</td><td>작업 PC</td></tr>
-      <tr><td>메인 워커 브릿지</td><td><code>main_worker_bridge</code>가 작업 폴더 기준으로 PC 창을 찾아 대화(transcript)를 읽고 지시를 주입(<code>console_inject</code>). <code>proc_cwd</code>가 창별 작업 폴더를 판별.</td><td>작업 PC</td></tr>
-      <tr><td>서브 워커 브릿지</td><td><code>codex_bridge</code>·<code>antigravity_bridge</code>·<code>grok_bridge</code>가 데몬을 실행해 결과를 저장하고, <code>delegate</code>가 메인 → 서브 위임을 중개.</td><td>작업 PC</td></tr>
+      <tr><td>PC 창 브릿지</td><td><code>main_worker_bridge</code>가 작업 폴더 기준으로 PC 창을 찾아 대화(transcript)를 읽고 지시를 주입(<code>console_inject</code>). <code>proc_cwd</code>가 창별 작업 폴더를 판별.</td><td>작업 PC</td></tr>
+      <tr><td>데몬 브릿지</td><td><code>codex_bridge</code>·<code>antigravity_bridge</code>·<code>grok_bridge</code>가 데몬을 실행해 결과를 저장하고, <code>delegate</code>가 위임을 중개.</td><td>작업 PC</td></tr>
       <tr><td>Cloudflare 터널</td><td>PC 안 7890 포트 ↔ 공개 https. 포트 개방·공유기 설정 없음, SSL 자동.</td><td>클라우드</td></tr>
       <tr><td>통합 허브</td><td>정적 페이지 1장. 장부를 읽어 켜진 PC마다 탭을 띄우고, 각 PC를 4초마다 직접 확인해 실제 응답할 때만 초록불. PC별 전용 주소도 발급.</td><td>클라우드</td></tr>
       <tr><td>기기 장부 (Gist)</td><td>어느 PC가 켜져 있고 주소가 무엇인지. 읽을 때는 API(무캐시) — raw CDN 캐시로 옛 주소를 덮어쓰던 사고를 막았다.</td><td>클라우드</td></tr>
@@ -209,9 +209,9 @@
   <div class="grid g3">
     <div class="card"><div class="ic">🌐</div><h3>① 원격 터널링</h3><p>Cloudflare Tunnel. 포트 개방·고정 IP·공유기 설정 전부 불필요 — PC가 밖으로 먼저 연결을 걸어 길을 연다.</p></div>
     <div class="card"><div class="ic">🪞</div><h3>② 미러링</h3><p>읽기는 세션 transcript(.jsonl)를 읽어 말풍선으로, 쓰기는 콘솔 주입으로 PC 창에 그대로 타이핑. 이 둘이 PC 창과 폰을 잇는다.</p></div>
-    <div class="card"><div class="ic">🔧</div><h3>③ 프로세스 파이프 위임</h3><p><code>delegate.js</code>가 자식 프로세스를 띄워 stdin/stdout으로 서브 워커를 부린다.</p></div>
+    <div class="card"><div class="ic">🔧</div><h3>③ 프로세스 파이프 위임</h3><p><code>delegate.js</code>가 자식 프로세스를 띄워 stdin/stdout으로 데몬 워커를 부린다.</p></div>
   </div>
-  <p class="cta-note" style="margin-top:16px">①②가 겹쳐야 밖에서 PC 창을 그대로 쓸 수 있고, 여기에 ③이 더해져야 서브 워커 3종을 한 작업장에서 동시에 쓴다.</p>
+  <p class="cta-note" style="margin-top:16px">①②가 겹쳐야 밖에서 PC 창을 그대로 쓸 수 있고, 여기에 ③이 더해져야 데몬 워커 3종을 한 작업장에서 동시에 쓴다.</p>
 </div></section>
 
 <section><div class="wrap">
@@ -219,20 +219,20 @@
   <h2>메인 하나, 서브 셋 — 일에 맞는 워커를 골라 지시</h2>
   <p class="sub">넷 다 PC 안에서 실행됩니다. 폰은 지시와 확인만 합니다.</p>
   <div class="grid g4">
-    <div class="card"><h3>Claude Code <span class="tag">메인</span></h3><p>PC 터미널 창에서 대화형으로 돈다. 폰은 그 창의 대화를 그대로 미러링해 보고, 폰 지시는 콘솔 입력으로 그 창에 그대로 타이핑된다. 긴급 정지는 그 창에 Ctrl+C 주입.</p></div>
-    <div class="card"><h3>Codex <span class="tag">서브1</span></h3><p>데몬으로 돈다. 시킬 때 <code>codex exec</code>가 일어나 실행하고 끝나면 종료. 화면 없이 결과만 남는다.</p></div>
-    <div class="card"><h3>Antigravity <span class="tag">서브2</span></h3><p>데몬으로 돈다. <code>agy -p</code> + <code>--conversation</code>으로 맥락을 유지하며, 시킬 때만 일어난다.</p></div>
-    <div class="card"><h3>Grok <span class="tag">서브3</span></h3><p>데몬으로 돈다. CLI 로그인 세션을 쓰며 API 키는 쓰지 않는다. 최초 <code>--session-id</code>, 이후 <code>--resume</code>으로 맥락을 유지한다.</p></div>
+    <div class="card"><h3>Claude Code <span class="tag">PC 창 대화형</span></h3><p>PC 터미널 창에서 대화형으로 돈다. 폰은 그 창의 대화를 그대로 미러링해 보고, 폰 지시는 콘솔 입력으로 그 창에 그대로 타이핑된다. 긴급 정지는 그 창에 Ctrl+C 주입.</p></div>
+    <div class="card"><h3>Codex <span class="tag">데몬</span></h3><p>데몬으로 돈다. 시킬 때 <code>codex exec</code>가 일어나 실행하고 끝나면 종료. 화면 없이 결과만 남는다.</p></div>
+    <div class="card"><h3>Antigravity <span class="tag">데몬</span></h3><p>데몬으로 돈다. <code>agy -p</code> + <code>--conversation</code>으로 맥락을 유지하며, 시킬 때만 일어난다.</p></div>
+    <div class="card"><h3>Grok <span class="tag">데몬</span></h3><p>데몬으로 돈다. CLI 로그인 세션을 쓰며 API 키는 쓰지 않는다. 최초 <code>--session-id</code>, 이후 <code>--resume</code>으로 맥락을 유지한다.</p></div>
   </div>
   <div class="card" style="margin-top:20px">
-    <h3 style="margin:0 0 8px;font-size:17px">서브 워커는 부하도 보조도 아니다 — 앉은 자리</h3>
+    <h3 style="margin:0 0 8px;font-size:17px">데몬 워커는 부하도 보조도 아니다 — 앉은 자리</h3>
     <p style="color:var(--dim);font-size:14.5px;margin:0 0 16px">메인/서브는 계급이 아니라 '앉은 자리'다. 네 워커 모두 같은 작업 폴더에서 읽고·쓰고·실행한다 — 능력은 대등하다. 독립 실행(폰 탭에서 직접 지시, 메인은 모름)일 때는 독립 작업자이고, 위임 수행(메인이 호출)일 때만 보조 성격을 띤다.</p>
     <div class="grid g3">
       <div><b style="font-size:14px">① 폰 → 해당 탭 직접 지시</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px">메인을 거치지 않음 · 가장 빠름</p></div>
       <div><b style="font-size:14px">② PC 터미널에서 직접</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>codex exec</code> · <code>agy -p</code> · <code>grok -p</code></p></div>
       <div><b style="font-size:14px">③ 메인에게 시키기</b><p style="margin:4px 0 0;color:var(--dim);font-size:13.5px"><code>node delegate.js grok "지시"</code></p></div>
     </div>
-    <p class="cta-note" style="margin-top:16px"><b>같은 파일을 두 워커가 동시에 만지지 않는다.</b> 서브 워커도 파일을 쓴다 — 동시에 고치면 나중에 저장한 쪽이 이기고 되돌릴 수단이 없다.</p>
+    <p class="cta-note" style="margin-top:16px"><b>같은 파일을 두 워커가 동시에 만지지 않는다.</b> 데몬 워커도 파일을 쓴다 — 동시에 고치면 나중에 저장한 쪽이 이기고 되돌릴 수단이 없다.</p>
   </div>
 </div></section>
 
@@ -241,9 +241,9 @@
   <h2>탭 5개, 그리고 긴급 정지</h2>
   <div class="grid g4 console-grid">
     <div class="card"><h3>Claude Code</h3><p>메인. PC 창 대화 미러 + 지시 입력. 폰 지시가 그 창 콘솔에 그대로 타이핑된다.</p></div>
-    <div class="card"><h3>Codex</h3><p>서브1. 지시 → 데몬 실행 → 결과. 상태 라벨(작업 중/대기)과 전체 히스토리.</p></div>
-    <div class="card"><h3>Antigravity</h3><p>서브2. Codex와 같은 데몬 방식. 사진·파일 업로드 후 분석 지시.</p></div>
-    <div class="card"><h3>Grok</h3><p>서브3. CLI 로그인 세션으로 실행하며, <code>grok_bridge</code>가 상태 확인과 지시 전송을 맡는다.</p></div>
+    <div class="card"><h3>Codex</h3><p>지시 → 데몬 실행 → 결과. 상태 라벨(작업 중/대기)과 전체 히스토리.</p></div>
+    <div class="card"><h3>Antigravity</h3><p>Codex와 같은 데몬 방식. 사진·파일 업로드 후 분석 지시.</p></div>
+    <div class="card"><h3>Grok</h3><p>CLI 로그인 세션으로 실행하며, <code>grok_bridge</code>가 상태 확인과 지시 전송을 맡는다.</p></div>
     <div class="card"><h3>M&amp;A 제안서</h3><p>프로젝트 전용 화면(예: M&amp;A 제안서 배포·매칭). 파일 API는 작업 폴더 밖을 차단.</p></div>
   </div>
   <p class="cta-note" style="margin-top:18px">공통 — 📎 업로드 하나(폰 기본 선택창, 중간 팝업 없음), 대화 보기 <b>요약/상세/전체</b>, <b>긴급 정지</b>(메인은 Ctrl+C 주입, 서브는 프로세스 종료), 허브 상단 <b>PC 탭</b>으로 다른 컴퓨터로 즉시 이동.</p>
